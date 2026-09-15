@@ -87,7 +87,17 @@ export default function Dashboard() {
   }
 
   const totalVehicles =
-    traffic?.totalVehicles ?? 0;
+    traffic?.currentVehicles ??
+    traffic?.totalVehicles ??
+    0;
+
+  const passedVehicles =
+    traffic?.passedVehicles ?? 0;
+
+  const waitingVehicles =
+    traffic?.waitingVehicles ??
+    traffic?.queueCount ??
+    0;
 
   const queueCount =
     traffic?.queueCount ?? 0;
@@ -95,8 +105,23 @@ export default function Dashboard() {
   const averageSpeed =
     traffic?.averageSpeed ?? 0;
 
+  const density =
+    traffic?.density ?? 0;
+
   const congestion =
     traffic?.congestionScore ?? 0;
+
+  const congestionLevel =
+    traffic?.congestionLevel ||
+    traffic?.trafficStatus ||
+    "UNKNOWN";
+
+  const signalState =
+    traffic?.signalState ||
+    "UNKNOWN";
+
+  const signalRemaining =
+    traffic?.signalRemainingSeconds ?? 0;
 
   return (
     <div className="page dashboard-page">
@@ -161,10 +186,29 @@ export default function Dashboard() {
       <section className="metrics-grid">
 
         <MetricCard
-          title="Vehicles detected"
+          title="Current vehicles"
           value={totalVehicles}
-          subtitle="Current junction"
+          subtitle="Active in simulation"
           icon={Car}
+        />
+
+        <MetricCard
+          title="Vehicles passed"
+          value={passedVehicles}
+          subtitle="Completed passes"
+          icon={Activity}
+        />
+
+        <MetricCard
+          title="Waiting vehicles"
+          value={waitingVehicles}
+          subtitle="Stopped / queued"
+          icon={Timer}
+          tone={
+            waitingVehicles > 10
+              ? "warning"
+              : "default"
+          }
         />
 
         <MetricCard
@@ -182,8 +226,15 @@ export default function Dashboard() {
         <MetricCard
           title="Average speed"
           value={averageSpeed.toFixed(1)}
-          unit="km/h"
-          subtitle="Current traffic"
+          unit="units"
+          subtitle="Simulation speed"
+          icon={Gauge}
+        />
+
+        <MetricCard
+          title="Traffic density"
+          value={density.toFixed(2)}
+          subtitle="Live junction density"
           icon={Gauge}
         />
 
@@ -192,6 +243,7 @@ export default function Dashboard() {
           value={congestion.toFixed(0)}
           unit="%"
           subtitle={
+            congestionLevel ||
             traffic?.trafficStatus ||
             "Monitoring"
           }
@@ -203,6 +255,17 @@ export default function Dashboard() {
               ? "warning"
               : "default"
           }
+        />
+
+        <MetricCard
+          title="Current signal"
+          value={signalState}
+          subtitle={
+            signalRemaining
+              ? `${signalRemaining}s remaining`
+              : "Signal status"
+          }
+          icon={Activity}
         />
 
       </section>

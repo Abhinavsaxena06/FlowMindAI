@@ -4,7 +4,7 @@ import EmergencyCorridor from "../components/signals/EmergencyCorridor";
 
 export default function SignalControl() {
   return (
-    <div className="page">
+    <div className="page signal-page">
 
       <section className="page-heading">
 
@@ -78,7 +78,7 @@ export default function SignalControl() {
 
       </div>
 
-      <div className="dashboard-grid">
+      <div className="dashboard-grid signal-grid">
 
         <SignalRecommendation />
 

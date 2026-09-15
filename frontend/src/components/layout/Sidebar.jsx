@@ -1,16 +1,12 @@
 import {
   Activity,
   BrainCircuit,
-  CarFront,
   ChevronRight,
   CircleGauge,
   GitBranch,
   LayoutDashboard,
   Radio,
-  Settings,
-  Siren,
   TrafficCone,
-  X,
 } from "lucide-react";
 
 import {
@@ -132,22 +128,6 @@ export default function Sidebar() {
 
           </div>
         ))}
-
-      </div>
-
-
-      {/* EMERGENCY SHORTCUT */}
-
-      <div className="sidebar-emergency">
-
-        <div className="sidebar-emergency-icon">
-          <Siren size={15} />
-        </div>
-
-        <div>
-          <strong>Emergency corridor</strong>
-          <span>Available in Simulation</span>
-        </div>
 
       </div>
 

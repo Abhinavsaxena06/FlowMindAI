@@ -4,11 +4,47 @@ export function normalizeTrafficState(raw = {}) {
     raw.lanes ||
     {};
 
+  const signal =
+    raw.signal ||
+    raw.signal_state ||
+    {};
+
+  const totals = raw.overall || {};
+
+  const currentVehicles = Number(
+    raw.current_vehicles ??
+      raw.total_vehicles ??
+      raw.vehicle_count ??
+      totals.total_vehicles ??
+      0
+  );
+
   return {
-    totalVehicles:
+    currentVehicles,
+
+    totalVehicles: currentVehicles,
+
+    totalSpawned:
       Number(
-        raw.total_vehicles ??
-        raw.vehicle_count ??
+        raw.total_spawned ??
+        raw.spawned_vehicles ??
+        0
+      ),
+
+    passedVehicles:
+      Number(
+        raw.passed_vehicles ??
+        raw.total_passed ??
+        raw.passed ??
+        0
+      ),
+
+    waitingVehicles:
+      Number(
+        raw.waiting_vehicles ??
+        raw.waiting ??
+        raw.queue_count ??
+        raw.queue_length ??
         0
       ),
 
@@ -16,6 +52,8 @@ export function normalizeTrafficState(raw = {}) {
       Number(
         raw.queue_count ??
         raw.queue_length ??
+        raw.total_queue ??
+        raw.waiting_vehicles ??
         0
       ),
 
@@ -23,12 +61,15 @@ export function normalizeTrafficState(raw = {}) {
       Number(
         raw.average_speed ??
         raw.avg_speed ??
+        totals.average_speed ??
         0
       ),
 
     density:
       Number(
         raw.density ??
+        raw.overall_density ??
+        totals.overall_density ??
         0
       ),
 
@@ -36,29 +77,63 @@ export function normalizeTrafficState(raw = {}) {
       Number(
         raw.congestion_score ??
         raw.congestion ??
+        totals.congestion_score ??
         0
       ),
 
-    trafficStatus:
+    congestionLevel:
+      raw.congestion_level ||
       raw.traffic_status ||
       raw.status ||
       "UNKNOWN",
 
+    trafficStatus:
+      raw.traffic_status ||
+      raw.status ||
+      raw.congestion_level ||
+      "UNKNOWN",
+
+    signalState:
+      signal.current_phase ||
+      signal.phase_name ||
+      signal.state ||
+      "UNKNOWN",
+
+    signalRemainingSeconds:
+      Number(
+        signal.remaining_seconds ??
+        signal.remaining ??
+        0
+      ),
+
+    activeDirection:
+      signal.active_direction ||
+      signal.direction ||
+      "UNKNOWN",
+
     laneCounts: {
       north: Number(
-        lanes.north ?? 0
+        lanes.north ??
+          lanes.north?.vehicle_count ??
+          0
       ),
 
       east: Number(
-        lanes.east ?? 0
+        lanes.east ??
+          lanes.east?.vehicle_count ??
+          0
       ),
 
       south: Number(
-        lanes.south ?? 0
+        lanes.south ??
+          lanes.south?.vehicle_count ??
+          0
       ),
 
       west: Number(
-        lanes.west ?? 0
+        lanes.west ??
+          lanes.west?.vehicle_count ??
+          0
       ),
     },
 

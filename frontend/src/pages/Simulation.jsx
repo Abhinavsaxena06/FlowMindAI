@@ -189,7 +189,9 @@ function createVehicle(
 
   return {
     id:
-      `${direction}-${Date.now()}-${Math.random()}`,
+      `${direction}-${Date.now()}-${Math.random()}-${Math.random()
+        .toString(16)
+        .slice(2)}`,
 
     direction,
 
@@ -216,6 +218,8 @@ function createVehicle(
 
     state: "approaching",
 
+    isWaiting: false,
+
     distance: 0,
 
     pathDistance: 0,
@@ -227,6 +231,190 @@ function createVehicle(
     turnProgress: 0,
 
     waitTime: 0,
+  };
+}
+
+function getDirectionMetricLabel(score) {
+  if (score >= 80) {
+    return "Critical";
+  }
+
+  if (score >= 60) {
+    return "High";
+  }
+
+  if (score >= 35) {
+    return "Moderate";
+  }
+
+  return "Low";
+}
+
+function buildDirectionMetrics(
+  vehicles,
+  passedByDirection = {}
+) {
+  const directionMetrics = {};
+
+  LANES.forEach((direction) => {
+    const directionVehicles = vehicles.filter(
+      (vehicle) =>
+        vehicle &&
+        vehicle.direction === direction
+    );
+
+    const currentVehicles =
+      directionVehicles.length;
+
+    const waitingVehicles =
+      directionVehicles.filter(
+        (vehicle) =>
+          vehicle.state === "approaching" &&
+          vehicle.isWaiting
+      ).length;
+
+    const queueLength = waitingVehicles;
+
+    const totalSpeed = directionVehicles.reduce(
+      (sum, vehicle) =>
+        sum + (Number(vehicle.speed) || 0),
+      0
+    );
+
+    const averageSpeed =
+      currentVehicles > 0
+        ? totalSpeed / currentVehicles
+        : 0;
+
+    const densityRatio = Math.min(
+      1,
+      currentVehicles / 10
+    );
+
+    const waitingRatio =
+      currentVehicles > 0
+        ? waitingVehicles / currentVehicles
+        : 0;
+
+    const congestionScore = Math.min(
+      100,
+      Math.round(
+        waitingRatio * 70 +
+          densityRatio * 30
+      )
+    );
+
+    directionMetrics[direction] = {
+      currentVehicles,
+      waitingVehicles,
+      queueLength,
+      passedVehicles:
+        Number(
+          passedByDirection[direction] || 0
+        ),
+      averageSpeed,
+      congestionScore,
+      congestionLevel:
+        getDirectionMetricLabel(
+          congestionScore
+        ),
+    };
+  });
+
+  return directionMetrics;
+}
+
+function buildSimulationStats(
+  vehicles,
+  totalSpawned,
+  passedVehicles,
+  passedByDirection = {}
+) {
+  const currentVehicles = vehicles.length;
+
+  const waitingVehicles = vehicles.filter(
+    (vehicle) =>
+      vehicle.state === "approaching" &&
+      vehicle.isWaiting
+  ).length;
+
+  const queueLength = waitingVehicles;
+
+  const laneCounts = {
+    north: 0,
+    east: 0,
+    south: 0,
+    west: 0,
+  };
+
+  const vehicleTypes = {
+    car: 0,
+    bike: 0,
+    truck: 0,
+  };
+
+  let totalSpeed = 0;
+
+  vehicles.forEach((vehicle) => {
+    if (vehicle.direction in laneCounts) {
+      laneCounts[vehicle.direction] += 1;
+    }
+
+    if (vehicle.type in vehicleTypes) {
+      vehicleTypes[vehicle.type] += 1;
+    }
+
+    totalSpeed += Number(vehicle.speed) || 0;
+  });
+
+  const averageSpeed =
+    currentVehicles > 0
+      ? totalSpeed / currentVehicles
+      : 0;
+
+  const densityRatio = Math.min(
+    1,
+    currentVehicles / 28
+  );
+
+  const waitingRatio =
+    currentVehicles > 0
+      ? waitingVehicles / currentVehicles
+      : 0;
+
+  const queueRatio = Math.min(
+    1,
+    queueLength / 12
+  );
+
+  const congestionScore = Math.min(
+    100,
+    Math.round(
+      densityRatio * 45 +
+        waitingRatio * 35 +
+        queueRatio * 20
+    )
+  );
+
+  return {
+    currentVehicles,
+    totalSpawned,
+    passedVehicles,
+    waitingVehicles,
+    queueLength,
+    laneCounts,
+    vehicleTypes,
+    averageSpeed,
+    congestionScore,
+    congestionLevel:
+      getDirectionMetricLabel(
+        congestionScore
+      ),
+    directionMetrics:
+      buildDirectionMetrics(
+        vehicles,
+        passedByDirection
+      ),
   };
 }
 
@@ -602,6 +790,9 @@ function updateApproachingVehicle(
       vehicle.direction
     ];
 
+  let leaderGap = Infinity;
+  let requiredGap = 0;
+
   /*
    * RED LIGHT
    *
@@ -620,20 +811,20 @@ function updateApproachingVehicle(
    * VEHICLE AHEAD
    */
   if (leader) {
-    const gap =
+    leaderGap =
       distance(
         vehicle,
         leader
       );
 
-    const requiredGap =
+    requiredGap =
       getVehicleGap(
         vehicle,
         leader
       );
 
     if (
-      gap <
+      leaderGap <
       requiredGap + 8
     ) {
       targetSpeed =
@@ -643,7 +834,7 @@ function updateApproachingVehicle(
             Math.max(
               0,
               (
-                gap -
+                leaderGap -
                 requiredGap
               ) / 8
             )
@@ -681,6 +872,33 @@ function updateApproachingVehicle(
             multiplier,
         targetSpeed
       );
+  }
+
+  const isWaitingBySignal =
+    signal !== "green" &&
+    stopDistance <= 14 &&
+    vehicle.speed <= 0.02;
+
+  const isWaitingByLeader =
+    leader !== null &&
+    leaderGap <
+      requiredGap + 2 &&
+    vehicle.speed <= 0.02;
+
+  vehicle.isWaiting =
+    vehicle.state === "approaching" &&
+    (isWaitingBySignal || isWaitingByLeader);
+
+  if (vehicle.isWaiting) {
+    vehicle.waitTime +=
+      multiplier * 0.016;
+  } else {
+    vehicle.waitTime = Math.max(
+      0,
+      vehicle.waitTime -
+        0.008 *
+          multiplier
+    );
   }
 
   /*
@@ -1056,12 +1274,57 @@ export default function Simulation() {
     INITIAL_SIGNALS
   );
 
+  const spawnedCountRef =
+    useRef(0);
+
+  const passedCountRef =
+    useRef(0);
+
+  const passedByDirectionRef =
+    useRef({
+      north: 0,
+      east: 0,
+      south: 0,
+      west: 0,
+    });
+
   const [
     vehicles,
     setVehicles,
-  ] = useState(
-    createInitialVehicles
-  );
+  ] = useState(() => {
+    const initial =
+      createInitialVehicles();
+
+    spawnedCountRef.current =
+      initial.length;
+
+    return initial;
+  });
+
+  const [
+    simulationStats,
+    setSimulationStats,
+  ] = useState({
+    currentVehicles: 0,
+    totalSpawned: 0,
+    passedVehicles: 0,
+    waitingVehicles: 0,
+    queueLength: 0,
+    laneCounts: {
+      north: 0,
+      east: 0,
+      south: 0,
+      west: 0,
+    },
+    vehicleTypes: {
+      car: 0,
+      bike: 0,
+      truck: 0,
+    },
+    averageSpeed: 0,
+    congestionScore: 0,
+    congestionLevel: "Low",
+  });
 
   const [
     selectedLane,
@@ -1116,6 +1379,17 @@ export default function Simulation() {
     ambulanceRef.current =
       ambulance;
   }, [ambulance]);
+
+  useEffect(() => {
+    setSimulationStats(
+      buildSimulationStats(
+        vehicles,
+        spawnedCountRef.current,
+        passedCountRef.current,
+        passedByDirectionRef.current
+      )
+    );
+  }, [vehicles]);
 
   useEffect(() => {
     let frame;
@@ -1192,11 +1466,24 @@ export default function Simulation() {
                   if (
                     finished
                   ) {
-                    finalVehicles.push(
+                    const replacement =
                       createVehicle(
                         vehicle.direction,
                         0
-                      )
+                      );
+
+                    passedCountRef.current +=
+                      1;
+                    passedByDirectionRef.current[
+                      vehicle.direction
+                    ] =
+                      (passedByDirectionRef.current[
+                        vehicle.direction
+                      ] || 0) + 1;
+                    spawnedCountRef.current +=
+                      1;
+                    finalVehicles.push(
+                      replacement
                     );
 
                     return;
@@ -1351,6 +1638,16 @@ export default function Simulation() {
     const initial =
       createInitialVehicles();
 
+    spawnedCountRef.current =
+      initial.length;
+    passedCountRef.current = 0;
+    passedByDirectionRef.current = {
+      north: 0,
+      east: 0,
+      south: 0,
+      west: 0,
+    };
+
     setVehicles(initial);
 
     setSignals(
@@ -1376,17 +1673,30 @@ export default function Simulation() {
     setRunning(true);
   }
 
-  const vehicleCount =
-    vehicles.length;
+  const currentVehicles =
+    simulationStats.currentVehicles;
 
   const waitingVehicles =
-    vehicles.filter(
-      (vehicle) =>
-        vehicle.state ===
-          "approaching" &&
-        vehicle.speed <
-          0.015
-    ).length;
+    simulationStats.waitingVehicles;
+
+  const queueLength =
+    simulationStats.queueLength;
+
+  const averageSpeed =
+    simulationStats.averageSpeed;
+
+  const congestionLevel =
+    simulationStats.congestionLevel;
+
+  const passedVehicles =
+    simulationStats.passedVehicles;
+
+  const directionMetrics =
+    simulationStats.directionMetrics ||
+    buildDirectionMetrics(
+      vehicles,
+      passedByDirectionRef.current
+    );
 
   return (
     <div className="page simulation-page">
@@ -1447,11 +1757,27 @@ export default function Simulation() {
 
               <div className="simulation-stat">
                 <Car size={14} />
-                {vehicleCount}
+                {currentVehicles}
+              </div>
+
+              <div className="simulation-stat">
+                Passed {passedVehicles}
               </div>
 
               <div className="simulation-stat">
                 Waiting {waitingVehicles}
+              </div>
+
+              <div className="simulation-stat">
+                Queue {queueLength}
+              </div>
+
+              <div className="simulation-stat">
+                Avg {averageSpeed.toFixed(2)}
+              </div>
+
+              <div className="simulation-stat">
+                Congestion {congestionLevel}
               </div>
 
               <button
@@ -1543,6 +1869,75 @@ export default function Simulation() {
               )
             )}
 
+            {LANES.map((lane) => {
+              const metrics =
+                directionMetrics[lane];
+
+              const state = {
+                north: {
+                  left: "50%",
+                  top: "9%",
+                },
+                east: {
+                  left: "91%",
+                  top: "50%",
+                },
+                south: {
+                  left: "50%",
+                  top: "91%",
+                },
+                west: {
+                  left: "9%",
+                  top: "50%",
+                },
+              }[lane];
+
+              return (
+                <div
+                  key={`${lane}-metrics`}
+                  style={{
+                    position: "absolute",
+                    ...state,
+                    transform:
+                      "translate(-50%, -50%)",
+                    display: "flex",
+                    flexDirection: "column",
+                    alignItems: "center",
+                    gap: 2,
+                    padding: "4px 7px",
+                    borderRadius: 999,
+                    background:
+                      "rgba(13, 17, 24, 0.82)",
+                    border:
+                      "1px solid rgba(148, 163, 184, 0.3)",
+                    color: "#e5eefb",
+                    fontSize: 9,
+                    lineHeight: 1.2,
+                    pointerEvents: "none",
+                    zIndex: 12,
+                    minWidth: 76,
+                  }}
+                >
+                  <strong
+                    style={{
+                      letterSpacing: 1,
+                      fontSize: 9,
+                    }}
+                  >
+                    {lane.toUpperCase()}
+                  </strong>
+
+                  <span>
+                    {metrics.currentVehicles} current
+                  </span>
+
+                  <span>
+                    {metrics.waitingVehicles} waiting
+                  </span>
+                </div>
+              );
+            })}
+
             {vehicles.map(
               (vehicle) => {
                 const position =
@@ -1600,6 +1995,103 @@ export default function Simulation() {
 
           </div>
 
+          <section
+            className="panel"
+            style={{
+              marginTop: 16,
+              padding: 16,
+            }}
+          >
+            <div className="panel-header">
+              <div>
+                <div className="eyebrow">
+                  APPROACH METRICS
+                </div>
+
+                <h2 style={{ margin: 0 }}>
+                  Direction-wise traffic
+                </h2>
+              </div>
+            </div>
+
+            <div
+              style={{
+                display: "grid",
+                gap: 10,
+                marginTop: 12,
+              }}
+            >
+              {LANES.map((lane) => {
+                const metrics =
+                  directionMetrics[lane];
+
+                return (
+                  <div
+                    key={`${lane}-detail`}
+                    style={{
+                      display: "grid",
+                      gridTemplateColumns:
+                        "1fr auto",
+                      gap: 10,
+                      padding: "10px 12px",
+                      borderRadius: 12,
+                      background:
+                        "rgba(15, 23, 42, 0.7)",
+                      border:
+                        "1px solid rgba(148, 163, 184, 0.2)",
+                    }}
+                  >
+                    <div>
+                      <div
+                        style={{
+                          fontSize: 12,
+                          fontWeight: 700,
+                          textTransform: "uppercase",
+                          letterSpacing: 0.6,
+                        }}
+                      >
+                        {lane}
+                        {" "}
+                        → {" "}
+                        {oppositeLane(lane).toUpperCase()}
+                      </div>
+
+                      <div
+                        style={{
+                          fontSize: 11,
+                          color: "#a7b7d1",
+                          marginTop: 4,
+                        }}
+                      >
+                        Current: {metrics.currentVehicles} · Waiting: {metrics.waitingVehicles} · Queue: {metrics.queueLength}
+                      </div>
+                    </div>
+
+                    <div
+                      style={{
+                        textAlign: "right",
+                        fontSize: 11,
+                        minWidth: 110,
+                      }}
+                    >
+                      <div>
+                        Passed: {metrics.passedVehicles}
+                      </div>
+
+                      <div>
+                        Avg Speed: {metrics.averageSpeed.toFixed(2)}
+                      </div>
+
+                      <div>
+                        Congestion: {metrics.congestionLevel} ({metrics.congestionScore})
+                      </div>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          </section>
+
         </section>
 
         <aside className="simulation-controls">
@@ -1656,13 +2148,9 @@ export default function Simulation() {
 
                     <strong>
                       {
-                        vehicles.filter(
-                          (
-                            vehicle
-                          ) =>
-                            vehicle.direction ===
-                            lane
-                        ).length
+                        simulationStats.laneCounts[
+                          lane
+                        ]
                       }
                     </strong>
                   </button>
