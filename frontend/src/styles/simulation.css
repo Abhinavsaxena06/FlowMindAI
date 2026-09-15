@@ -1,0 +1,1591 @@
+/* =========================================================
+   FLOWMIND SIMULATION
+   ========================================================= */
+
+.simulation-page {
+  padding-bottom: 40px;
+}
+
+
+/* =========================================================
+   HEADER
+   ========================================================= */
+
+.simulation-header {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+
+  gap: 24px;
+
+  margin-bottom: 24px;
+}
+
+.simulation-title-row {
+  display: flex;
+  align-items: center;
+
+  gap: 20px;
+}
+
+.simulation-title-row h1 {
+  margin: 0;
+
+  font-size: clamp(28px, 3vw, 40px);
+
+  letter-spacing: -0.035em;
+}
+
+.simulation-title-row p {
+  margin: 9px 0 0;
+
+  font-size: 13px;
+
+  color: var(--text-secondary);
+}
+
+.simulation-live {
+  display: flex;
+  align-items: center;
+
+  gap: 7px;
+
+  padding: 7px 10px;
+
+  border:
+    1px solid
+    rgba(52, 211, 153, 0.2);
+
+  border-radius: 999px;
+
+  background:
+    rgba(52, 211, 153, 0.07);
+
+  color: var(--success);
+
+  font-size: 9px;
+  font-weight: 750;
+
+  letter-spacing: 0.06em;
+
+  white-space: nowrap;
+}
+
+.simulation-live span {
+  width: 6px;
+  height: 6px;
+
+  border-radius: 50%;
+
+  background: var(--success);
+
+  box-shadow:
+    0 0 10px
+    rgba(52, 211, 153, 0.8);
+}
+
+.simulation-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.simulation-action {
+  height: 35px;
+
+  display: inline-flex;
+  align-items: center;
+
+  gap: 7px;
+
+  padding: 0 12px;
+
+  border:
+    1px solid
+    var(--border);
+
+  border-radius: 9px;
+
+  background: var(--surface);
+
+  color: var(--text-secondary);
+
+  font-size: 11px;
+  font-weight: 600;
+
+  cursor: pointer;
+
+  transition:
+    background var(--transition),
+    color var(--transition),
+    border-color var(--transition);
+}
+
+.simulation-action:hover {
+  background: var(--surface-2);
+
+  color: var(--text);
+
+  border-color: var(--border-strong);
+}
+
+
+/* =========================================================
+   MAIN LAYOUT
+   ========================================================= */
+
+.simulation-layout {
+  display: grid;
+
+  grid-template-columns:
+    minmax(0, 1.55fr)
+    minmax(330px, 0.75fr);
+
+  gap: 18px;
+
+  align-items: start;
+}
+
+
+/* =========================================================
+   VISUAL CARD
+   ========================================================= */
+
+.simulation-visual-card {
+  min-width: 0;
+
+  border:
+    1px solid
+    var(--border);
+
+  border-radius: 18px;
+
+  background:
+    linear-gradient(
+      145deg,
+      #101823,
+      #0b1018
+    );
+
+  box-shadow: var(--shadow);
+
+  overflow: hidden;
+}
+
+.simulation-card-header {
+  min-height: 68px;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  padding: 15px 18px;
+
+  border-bottom:
+    1px solid
+    var(--border);
+}
+
+.simulation-card-header strong {
+  display: block;
+
+  font-size: 13px;
+
+  color: var(--text);
+}
+
+.simulation-card-header span {
+  display: block;
+
+  margin-top: 4px;
+
+  font-size: 10px;
+
+  color: var(--text-muted);
+}
+
+.digital-twin-badge {
+  display: flex;
+  align-items: center;
+
+  gap: 6px;
+
+  padding: 6px 9px;
+
+  border:
+    1px solid
+    rgba(167, 139, 250, 0.2);
+
+  border-radius: 7px;
+
+  background:
+    rgba(167, 139, 250, 0.08);
+
+  color: var(--purple);
+
+  font-size: 9px;
+  font-weight: 700;
+
+  letter-spacing: 0.05em;
+}
+
+
+/* =========================================================
+   ROUNDABOUT STAGE
+   ========================================================= */
+
+.roundabout-stage {
+  position: relative;
+
+  width: 100%;
+
+  height: 570px;
+
+  overflow: hidden;
+
+  background:
+    radial-gradient(
+      circle at center,
+      rgba(56, 189, 248, 0.035),
+      transparent 45%
+    ),
+    #080d13;
+}
+
+
+/* =========================================================
+   ROADS
+   ========================================================= */
+
+.road {
+  position: absolute;
+
+  background:
+    #1b222c;
+
+  box-shadow:
+    inset 0 0 0 1px
+    rgba(255, 255, 255, 0.025);
+}
+
+.road-north,
+.road-south {
+  width: 118px;
+
+  left: calc(50% - 59px);
+
+  top: 0;
+  bottom: 0;
+}
+
+.road-east,
+.road-west {
+  height: 118px;
+
+  top: calc(50% - 59px);
+
+  left: 0;
+  right: 0;
+}
+
+
+/* =========================================================
+   ROAD CENTER LINES
+   ========================================================= */
+
+.lane-mark {
+  position: absolute;
+
+  opacity: 0.42;
+
+  background:
+    repeating-linear-gradient(
+      to bottom,
+      transparent 0,
+      transparent 12px,
+      rgba(255, 255, 255, 0.24) 12px,
+      rgba(255, 255, 255, 0.24) 22px
+    );
+}
+
+.lane-mark.lane-north,
+.lane-mark.lane-south {
+  width: 2px;
+
+  left: calc(50% - 1px);
+
+  top: 0;
+  bottom: 0;
+}
+
+.lane-mark.lane-east,
+.lane-mark.lane-west {
+  height: 2px;
+
+  top: calc(50% - 1px);
+
+  left: 0;
+  right: 0;
+
+  background:
+    repeating-linear-gradient(
+      to right,
+      transparent 0,
+      transparent 12px,
+      rgba(255, 255, 255, 0.24) 12px,
+      rgba(255, 255, 255, 0.24) 22px
+    );
+}
+
+
+/* =========================================================
+   ROUNDABOUT
+   ========================================================= */
+
+.roundabout-outer {
+  position: absolute;
+
+  width: 310px;
+  height: 310px;
+
+  left: calc(50% - 155px);
+  top: calc(50% - 155px);
+
+  border-radius: 50%;
+
+  background:
+    #252d37;
+
+  border:
+    10px solid
+    #161d26;
+
+  box-shadow:
+    0 0 0 1px
+    rgba(255, 255, 255, 0.06),
+    0 20px 60px
+    rgba(0, 0, 0, 0.3);
+}
+
+.roundabout-inner {
+  position: absolute;
+
+  inset: 36px;
+
+  border-radius: 50%;
+
+  border:
+    3px dashed
+    rgba(255, 255, 255, 0.11);
+}
+
+.roundabout-center {
+  position: absolute;
+
+  width: 116px;
+  height: 116px;
+
+  left: calc(50% - 58px);
+  top: calc(50% - 58px);
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 50%;
+
+  background:
+    radial-gradient(
+      circle,
+      #172331,
+      #101720
+    );
+
+  border:
+    1px solid
+    rgba(56, 189, 248, 0.18);
+
+  box-shadow:
+    0 0 40px
+    rgba(56, 189, 248, 0.07);
+}
+
+.roundabout-center span {
+  font-size: 15px;
+  font-weight: 800;
+
+  letter-spacing: 0.08em;
+
+  color: var(--primary);
+}
+
+.roundabout-center small {
+  margin-top: 3px;
+
+  font-size: 9px;
+
+  color: var(--text-muted);
+
+  letter-spacing: 0.15em;
+}
+
+
+/* =========================================================
+   MOVING VEHICLES
+   ========================================================= */
+
+.moving-vehicle {
+  position: absolute;
+
+  z-index: 15;
+
+  width: 27px;
+  height: 19px;
+
+  display: grid;
+  place-items: center;
+
+  border:
+    1px solid
+    rgba(56, 189, 248, 0.22);
+
+  border-radius: 5px;
+
+  background:
+    #162536;
+
+  color: #67c9f7;
+
+  box-shadow:
+    0 3px 12px
+    rgba(0, 0, 0, 0.35);
+}
+
+
+/* APPROACH VEHICLES */
+
+.vehicle-north {
+  left: calc(50% - 13px);
+
+  top: -25px;
+
+  animation:
+    north-car
+    7s
+    linear
+    infinite;
+}
+
+.vehicle-south {
+  left: calc(50% - 13px);
+
+  bottom: -25px;
+
+  animation:
+    south-car
+    8s
+    linear
+    infinite;
+}
+
+.vehicle-east {
+  right: -25px;
+
+  top: calc(50% - 9px);
+
+  animation:
+    east-car
+    7.5s
+    linear
+    infinite;
+}
+
+.vehicle-west {
+  left: -25px;
+
+  top: calc(50% - 9px);
+
+  animation:
+    west-car
+    8.5s
+    linear
+    infinite;
+}
+
+
+/* =========================================================
+   CIRCULAR VEHICLES
+   ========================================================= */
+
+.vehicle-round-1,
+.vehicle-round-2,
+.vehicle-round-3,
+.vehicle-round-4 {
+  left: calc(50% - 13px);
+  top: calc(50% - 9px);
+
+  background: #172a27;
+
+  color: var(--success);
+
+  offset-path:
+    path(
+      "M 0 -110
+       A 110 110 0 1 1 0 110
+       A 110 110 0 1 1 0 -110"
+    );
+
+  offset-rotate: auto;
+
+  animation:
+    roundabout-drive
+    8s
+    linear
+    infinite;
+}
+
+.vehicle-round-2 {
+  animation-delay: -2s;
+}
+
+.vehicle-round-3 {
+  animation-delay: -4s;
+}
+
+.vehicle-round-4 {
+  animation-delay: -6s;
+}
+
+@keyframes roundabout-drive {
+
+  from {
+    offset-distance: 0%;
+  }
+
+  to {
+    offset-distance: 100%;
+  }
+
+}
+
+
+/* =========================================================
+   APPROACH ANIMATIONS
+   ========================================================= */
+
+@keyframes north-car {
+
+  0% {
+    transform: translateY(0);
+  }
+
+  100% {
+    transform: translateY(270px);
+  }
+
+}
+
+@keyframes south-car {
+
+  0% {
+    transform: translateY(0);
+  }
+
+  100% {
+    transform: translateY(-270px);
+  }
+
+}
+
+@keyframes east-car {
+
+  0% {
+    transform: translateX(0);
+  }
+
+  100% {
+    transform: translateX(-270px);
+  }
+
+}
+
+@keyframes west-car {
+
+  0% {
+    transform: translateX(0);
+  }
+
+  100% {
+    transform: translateX(270px);
+  }
+
+}
+
+
+/* =========================================================
+   AMBULANCE
+   ========================================================= */
+
+.ambulance-route {
+  position: absolute;
+
+  inset: 0;
+
+  z-index: 25;
+
+  pointer-events: none;
+
+  opacity: 0;
+}
+
+.ambulance-route:has(.ambulance-vehicle) {
+  opacity: 1;
+}
+
+.route-line {
+  position: absolute;
+
+  width: 4px;
+  height: 250px;
+
+  left: calc(50% - 2px);
+
+  top: 0;
+
+  background:
+    repeating-linear-gradient(
+      to bottom,
+      var(--danger) 0,
+      var(--danger) 8px,
+      transparent 8px,
+      transparent 15px
+    );
+
+  opacity: 0.5;
+}
+
+.ambulance-vehicle {
+  position: absolute;
+
+  left: calc(50% - 15px);
+
+  top: 30px;
+
+  width: 30px;
+  height: 24px;
+
+  display: grid;
+  place-items: center;
+
+  border-radius: 6px;
+
+  background:
+    var(--danger);
+
+  color: white;
+
+  box-shadow:
+    0 0 18px
+    rgba(251, 113, 133, 0.65);
+
+  animation:
+    ambulance-drive
+    4s
+    linear
+    infinite;
+}
+
+@keyframes ambulance-drive {
+
+  0% {
+    transform: translateY(-20px);
+  }
+
+  100% {
+    transform: translateY(350px);
+  }
+
+}
+
+
+/* =========================================================
+   JUNCTION LABEL
+   ========================================================= */
+
+.junction-label {
+  position: absolute;
+
+  left: 50%;
+  bottom: 22px;
+
+  transform: translateX(-50%);
+
+  padding: 6px 10px;
+
+  border:
+    1px solid
+    var(--border);
+
+  border-radius: 6px;
+
+  background:
+    rgba(7, 10, 15, 0.8);
+
+  color: var(--text-muted);
+
+  font-size: 9px;
+  font-weight: 700;
+
+  letter-spacing: 0.1em;
+}
+
+
+/* =========================================================
+   SIGNAL STATUS ROW
+   ========================================================= */
+
+.signal-status-row {
+  display: grid;
+
+  grid-template-columns:
+    repeat(4, 1fr);
+
+  gap: 8px;
+
+  padding: 14px 16px 16px;
+
+  border-top:
+    1px solid
+    var(--border);
+
+  background:
+    rgba(0, 0, 0, 0.12);
+}
+
+.simulation-signal {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  padding: 9px 10px;
+
+  border:
+    1px solid
+    var(--border);
+
+  border-radius: 9px;
+
+  background:
+    rgba(255, 255, 255, 0.02);
+}
+
+.signal-label {
+  font-size: 10px;
+  font-weight: 650;
+
+  color: var(--text-secondary);
+}
+
+.traffic-light {
+  display: flex;
+
+  gap: 4px;
+
+  padding: 4px 5px;
+
+  border-radius: 999px;
+
+  background:
+    #080c11;
+}
+
+.light {
+  width: 7px;
+  height: 7px;
+
+  border-radius: 50%;
+
+  opacity: 0.18;
+}
+
+.light.red {
+  background: var(--danger);
+}
+
+.light.yellow {
+  background: var(--warning);
+}
+
+.light.green {
+  background: var(--success);
+}
+
+.light.active {
+  opacity: 1;
+
+  box-shadow:
+    0 0 8px
+    currentColor;
+}
+
+
+/* =========================================================
+   CONTROL PANEL
+   ========================================================= */
+
+.simulation-control-panel {
+  display: flex;
+  flex-direction: column;
+
+  gap: 14px;
+}
+
+.control-card {
+  padding: 16px;
+
+  border:
+    1px solid
+    var(--border);
+
+  border-radius: 15px;
+
+  background: var(--surface);
+
+  box-shadow: var(--shadow);
+}
+
+.control-card-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+
+  margin-bottom: 14px;
+}
+
+.control-card-header svg {
+  color: var(--primary);
+}
+
+.control-eyebrow {
+  display: block;
+
+  margin-bottom: 4px;
+
+  font-size: 8px;
+  font-weight: 750;
+
+  letter-spacing: 0.13em;
+
+  color: var(--text-muted);
+}
+
+.control-card h3 {
+  margin: 0;
+
+  font-size: 14px;
+
+  color: var(--text);
+}
+
+
+/* =========================================================
+   MODE SWITCH
+   ========================================================= */
+
+.mode-switch {
+  display: grid;
+
+  grid-template-columns:
+    1fr 1fr;
+
+  gap: 5px;
+
+  padding: 4px;
+
+  border-radius: 10px;
+
+  background:
+    rgba(255, 255, 255, 0.04);
+}
+
+.mode-option {
+  height: 33px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  gap: 6px;
+
+  border-radius: 7px;
+
+  color: var(--text-muted);
+
+  font-size: 10px;
+  font-weight: 650;
+
+  cursor: pointer;
+}
+
+.mode-option.active {
+  background:
+    var(--primary-soft);
+
+  color: var(--primary);
+}
+
+.control-description {
+  margin-top: 10px;
+
+  font-size: 10px;
+  line-height: 1.5;
+
+  color: var(--text-muted);
+}
+
+
+/* =========================================================
+   DIRECTION CONTROL
+   ========================================================= */
+
+.direction-controls {
+  display: grid;
+
+  grid-template-columns:
+    1fr 1fr;
+
+  gap: 7px;
+}
+
+.direction-button {
+  min-width: 0;
+
+  display: grid;
+
+  grid-template-columns:
+    29px 1fr;
+
+  grid-template-rows:
+    1fr 1fr;
+
+  column-gap: 8px;
+
+  padding: 9px;
+
+  text-align: left;
+
+  border:
+    1px solid
+    var(--border);
+
+  border-radius: 9px;
+
+  background:
+    rgba(255, 255, 255, 0.02);
+
+  color: var(--text-secondary);
+
+  cursor: pointer;
+
+  transition:
+    background var(--transition),
+    border-color var(--transition),
+    color var(--transition);
+}
+
+.direction-button:hover:not(:disabled) {
+  background:
+    rgba(255, 255, 255, 0.045);
+
+  border-color:
+    var(--border-strong);
+}
+
+.direction-button.active {
+  border-color:
+    rgba(52, 211, 153, 0.25);
+
+  background:
+    var(--success-soft);
+
+  color: var(--success);
+}
+
+.direction-button:disabled {
+  opacity: 0.45;
+
+  cursor: not-allowed;
+}
+
+.direction-icon {
+  width: 29px;
+  height: 29px;
+
+  grid-row: 1 / 3;
+
+  display: grid;
+  place-items: center;
+
+  border-radius: 7px;
+
+  background:
+    rgba(255, 255, 255, 0.05);
+}
+
+.direction-button span:nth-child(2) {
+  align-self: end;
+
+  font-size: 10px;
+  font-weight: 700;
+}
+
+.direction-button small {
+  align-self: start;
+
+  font-size: 8px;
+
+  color: var(--text-muted);
+}
+
+
+/* =========================================================
+   EMERGENCY CARD
+   ========================================================= */
+
+.emergency-card {
+  padding: 16px;
+
+  border:
+    1px solid
+    rgba(251, 113, 133, 0.16);
+
+  border-radius: 15px;
+
+  background:
+    linear-gradient(
+      145deg,
+      rgba(251, 113, 133, 0.07),
+      rgba(15, 21, 31, 0.98)
+    );
+
+  box-shadow: var(--shadow);
+}
+
+.emergency-card.active {
+  border-color:
+    rgba(251, 113, 133, 0.4);
+
+  box-shadow:
+    0 0 35px
+    rgba(251, 113, 133, 0.08);
+}
+
+.emergency-card-top {
+  display: flex;
+  align-items: center;
+
+  gap: 10px;
+
+  margin-bottom: 14px;
+}
+
+.emergency-icon {
+  width: 34px;
+  height: 34px;
+
+  display: grid;
+  place-items: center;
+
+  border-radius: 9px;
+
+  background:
+    var(--danger-soft);
+
+  color: var(--danger);
+}
+
+.emergency-card-top span {
+  display: block;
+
+  margin-bottom: 3px;
+
+  font-size: 8px;
+  font-weight: 750;
+
+  letter-spacing: 0.1em;
+
+  color: var(--danger);
+}
+
+.emergency-card-top strong {
+  font-size: 13px;
+
+  color: var(--text);
+}
+
+
+/* =========================================================
+   SELECT
+   ========================================================= */
+
+.route-label {
+  display: block;
+
+  margin-bottom: 6px;
+
+  font-size: 9px;
+  font-weight: 600;
+
+  color: var(--text-muted);
+}
+
+.emergency-card select {
+  width: 100%;
+  height: 35px;
+
+  margin-bottom: 9px;
+
+  padding: 0 10px;
+
+  border:
+    1px solid
+    var(--border);
+
+  border-radius: 8px;
+
+  background:
+    var(--surface-2);
+
+  color: var(--text);
+
+  font-size: 10px;
+
+  outline: none;
+}
+
+.emergency-card select:focus {
+  border-color:
+    rgba(251, 113, 133, 0.4);
+}
+
+
+/* =========================================================
+   DISPATCH BUTTON
+   ========================================================= */
+
+.dispatch-button {
+  width: 100%;
+  height: 39px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  gap: 8px;
+
+  border-radius: 9px;
+
+  background:
+    var(--danger);
+
+  color: white;
+
+  font-size: 10px;
+  font-weight: 750;
+
+  cursor: pointer;
+
+  box-shadow:
+    0 8px 20px
+    rgba(251, 113, 133, 0.16);
+
+  transition:
+    transform var(--transition),
+    filter var(--transition);
+}
+
+.dispatch-button:hover {
+  transform: translateY(-1px);
+
+  filter: brightness(1.08);
+}
+
+
+/* =========================================================
+   ACTIVE EMERGENCY
+   ========================================================= */
+
+.emergency-active {
+  display: flex;
+  align-items: center;
+
+  gap: 10px;
+
+  padding: 10px;
+
+  border-radius: 9px;
+
+  background:
+    rgba(251, 113, 133, 0.07);
+}
+
+.emergency-pulse {
+  width: 34px;
+  height: 34px;
+
+  display: grid;
+  place-items: center;
+
+  flex-shrink: 0;
+
+  border-radius: 50%;
+
+  background:
+    var(--danger);
+
+  color: white;
+
+  animation:
+    emergency-pulse
+    1.3s
+    ease-in-out
+    infinite;
+}
+
+@keyframes emergency-pulse {
+
+  0%,
+  100% {
+    box-shadow:
+      0 0 0 0
+      rgba(251, 113, 133, 0.45);
+  }
+
+  50% {
+    box-shadow:
+      0 0 0 8px
+      rgba(251, 113, 133, 0);
+  }
+
+}
+
+.emergency-active strong {
+  display: block;
+
+  font-size: 9px;
+
+  color: var(--danger);
+}
+
+.emergency-active span {
+  display: block;
+
+  margin-top: 3px;
+
+  font-size: 9px;
+
+  color: var(--text-secondary);
+}
+
+.emergency-rule {
+  display: flex;
+  align-items: flex-start;
+
+  gap: 7px;
+
+  margin: 10px 0;
+
+  font-size: 9px;
+  line-height: 1.5;
+
+  color: var(--text-muted);
+}
+
+.emergency-rule svg {
+  flex-shrink: 0;
+
+  color: var(--danger);
+}
+
+.end-emergency {
+  width: 100%;
+  height: 34px;
+
+  border:
+    1px solid
+    rgba(251, 113, 133, 0.25);
+
+  border-radius: 8px;
+
+  background:
+    rgba(251, 113, 133, 0.08);
+
+  color: var(--danger);
+
+  font-size: 9px;
+  font-weight: 700;
+
+  cursor: pointer;
+}
+
+
+/* =========================================================
+   SUMMARY
+   ========================================================= */
+
+.simulation-summary {
+  padding: 15px;
+
+  border:
+    1px solid
+    var(--border);
+
+  border-radius: 15px;
+
+  background:
+    rgba(255, 255, 255, 0.02);
+}
+
+.summary-title {
+  margin-bottom: 12px;
+
+  font-size: 8px;
+  font-weight: 750;
+
+  letter-spacing: 0.11em;
+
+  color: var(--text-muted);
+}
+
+.summary-grid {
+  display: grid;
+
+  grid-template-columns:
+    repeat(3, 1fr);
+
+  gap: 8px;
+}
+
+.summary-grid > div {
+  min-width: 0;
+
+  padding: 9px;
+
+  border-radius: 8px;
+
+  background:
+    rgba(255, 255, 255, 0.025);
+}
+
+.summary-grid strong {
+  display: block;
+
+  overflow: hidden;
+
+  font-size: 13px;
+
+  white-space: nowrap;
+  text-overflow: ellipsis;
+
+  color: var(--text);
+}
+
+.summary-grid span {
+  display: block;
+
+  margin-top: 3px;
+
+  font-size: 8px;
+
+  color: var(--text-muted);
+}
+
+
+/* =========================================================
+   EXPLANATION
+   ========================================================= */
+
+.simulation-explanation {
+  display: flex;
+  align-items: flex-start;
+
+  gap: 12px;
+
+  margin-top: 18px;
+
+  padding: 15px 17px;
+
+  border:
+    1px solid
+    var(--border);
+
+  border-radius: 13px;
+
+  background:
+    rgba(56, 189, 248, 0.035);
+}
+
+.explanation-icon {
+  width: 30px;
+  height: 30px;
+
+  display: grid;
+  place-items: center;
+
+  flex-shrink: 0;
+
+  border-radius: 8px;
+
+  background:
+    var(--primary-soft);
+
+  color: var(--primary);
+}
+
+.simulation-explanation strong {
+  display: block;
+
+  margin-bottom: 4px;
+
+  font-size: 11px;
+
+  color: var(--text);
+}
+
+.simulation-explanation p {
+  max-width: 1000px;
+
+  margin: 0;
+
+  font-size: 10px;
+  line-height: 1.6;
+
+  color: var(--text-muted);
+}
+
+
+/* =========================================================
+   RESPONSIVE
+   ========================================================= */
+
+@media (max-width: 1200px) {
+
+  .simulation-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .simulation-control-panel {
+    display: grid;
+
+    grid-template-columns:
+      repeat(2, minmax(0, 1fr));
+
+    align-items: start;
+  }
+
+  .simulation-summary {
+    grid-column: span 2;
+  }
+
+}
+
+
+@media (max-width: 900px) {
+
+  .simulation-header {
+    align-items: flex-start;
+
+    flex-direction: column;
+  }
+
+  .simulation-title-row {
+    align-items: flex-start;
+
+    flex-direction: column;
+
+    gap: 10px;
+  }
+
+  .simulation-actions {
+    width: 100%;
+  }
+
+  .simulation-action {
+    flex: 1;
+  }
+
+}
+
+
+@media (max-width: 640px) {
+
+  .simulation-layout {
+    gap: 12px;
+  }
+
+  .roundabout-stage {
+    height: 410px;
+  }
+
+  .roundabout-outer {
+    width: 230px;
+    height: 230px;
+
+    left: calc(50% - 115px);
+    top: calc(50% - 115px);
+
+    border-width: 8px;
+  }
+
+  .roundabout-inner {
+    inset: 26px;
+  }
+
+  .roundabout-center {
+    width: 82px;
+    height: 82px;
+
+    left: calc(50% - 41px);
+    top: calc(50% - 41px);
+  }
+
+  .roundabout-center span {
+    font-size: 11px;
+  }
+
+  .road-north,
+  .road-south {
+    width: 88px;
+
+    left: calc(50% - 44px);
+  }
+
+  .road-east,
+  .road-west {
+    height: 88px;
+
+    top: calc(50% - 44px);
+  }
+
+  .simulation-control-panel {
+    display: flex;
+  }
+
+  .signal-status-row {
+    grid-template-columns:
+      repeat(2, 1fr);
+  }
+
+  .simulation-card-header {
+    padding: 13px;
+  }
+
+  .digital-twin-badge {
+    display: none;
+  }
+
+  .simulation-title-row h1 {
+    font-size: 28px;
+  }
+
+}

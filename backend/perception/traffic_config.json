@@ -1,0 +1,75 @@
+{
+    "junction_id": "JUNCTION-A",
+
+    "camera": {
+        "source": "data/videos/traffic.mp4",
+        "processing_fps": 8
+    },
+
+    "model": {
+        "path": "models/yolov8m.pt",
+        "confidence": 0.30
+    },
+
+    "vehicle_classes": {
+        "2": "car",
+        "3": "motorcycle",
+        "5": "bus",
+        "7": "truck"
+    },
+
+    "approaches": {
+        "north": {
+            "polygon": [
+                [0.35, 0.00],
+                [0.65, 0.00],
+                [0.65, 0.42],
+                [0.35, 0.42]
+            ],
+            "stop_line": 0.40
+        },
+
+        "east": {
+            "polygon": [
+                [0.58, 0.35],
+                [1.00, 0.35],
+                [1.00, 0.65],
+                [0.58, 0.65]
+            ],
+            "stop_line": 0.60
+        },
+
+        "south": {
+            "polygon": [
+                [0.35, 0.58],
+                [0.65, 0.58],
+                [0.65, 1.00],
+                [0.35, 1.00]
+            ],
+            "stop_line": 0.60
+        },
+
+        "west": {
+            "polygon": [
+                [0.00, 0.35],
+                [0.42, 0.35],
+                [0.42, 0.65],
+                [0.00, 0.65]
+            ],
+            "stop_line": 0.40
+        }
+    },
+
+    "speed": {
+        "meters_per_pixel": 0.04,
+        "stopped_speed_kmh": 5.0
+    },
+
+    "queue": {
+        "queue_speed_kmh": 8.0
+    },
+
+    "state": {
+        "update_interval_seconds": 1.0
+    }
+}

@@ -1,0 +1,1757 @@
+/* =========================================================
+   FLOWMIND — COMPONENT STYLES
+   ========================================================= */
+
+/* =========================================================
+   BRAND
+   ========================================================= */
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  padding: 4px 7px 20px;
+  border-bottom: 1px solid var(--border);
+}
+
+.brand-mark {
+  width: 34px;
+  height: 34px;
+  flex: none;
+
+  display: grid;
+  place-items: center;
+
+  color: var(--primary);
+
+  background:
+    rgba(56, 189, 248, 0.1);
+
+  border:
+    1px solid
+    rgba(56, 189, 248, 0.16);
+
+  border-radius: 9px;
+}
+
+.brand-copy {
+  min-width: 0;
+
+  display: flex;
+  flex-direction: column;
+}
+
+.brand-copy strong {
+  font-size: 14px;
+  line-height: 1.2;
+}
+
+.brand-copy span {
+  margin-top: 3px;
+
+  color: var(--dim);
+
+  font-size: 9px;
+}
+
+/* =========================================================
+   SIDEBAR
+   ========================================================= */
+
+.sidebar-section {
+  padding-top: 20px;
+}
+
+.sidebar-label {
+  margin: 0 8px 9px;
+
+  color: #566274;
+
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: 0.13em;
+}
+
+.sidebar-nav {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.nav-item {
+  height: 39px;
+
+  display: flex;
+  align-items: center;
+  gap: 10px;
+
+  padding: 0 10px;
+
+  color: #8e9aaa;
+
+  border-radius: 9px;
+
+  font-size: 11px;
+  font-weight: 650;
+
+  transition:
+    background 160ms ease,
+    color 160ms ease;
+}
+
+.nav-item:hover {
+  color: var(--text);
+
+  background:
+    rgba(255, 255, 255, 0.045);
+}
+
+.nav-item.active {
+  color: var(--primary);
+
+  background:
+    rgba(56, 189, 248, 0.12);
+
+  box-shadow:
+    inset 2px 0 0
+    var(--primary);
+}
+
+.sidebar-spacer {
+  flex: 1;
+}
+
+.sidebar-system {
+  padding: 12px 9px;
+
+  border-top:
+    1px solid
+    var(--border);
+}
+
+.system-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+
+  color: #9aa6b6;
+
+  font-size: 10px;
+  font-weight: 700;
+}
+
+.sidebar-system small {
+  display: block;
+
+  margin: 5px 0 0 15px;
+
+  color: #596678;
+
+  font-size: 9px;
+}
+
+.sidebar-settings {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+
+  padding: 12px 9px;
+
+  color: #748094;
+
+  font-size: 10px;
+}
+
+/* =========================================================
+   TOPBAR
+   ========================================================= */
+
+.topbar-location {
+  min-width: 0;
+
+  display: flex;
+  align-items: center;
+  gap: 9px;
+
+  color: var(--muted);
+}
+
+.topbar-location > svg {
+  flex: none;
+  color: var(--primary);
+}
+
+.topbar-location div {
+  min-width: 0;
+
+  display: flex;
+  flex-direction: column;
+}
+
+.topbar-location strong {
+  overflow: hidden;
+
+  color: var(--text);
+
+  font-size: 11px;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.topbar-location span {
+  margin-top: 2px;
+
+  color: var(--dim);
+
+  font-size: 9px;
+}
+
+.topbar-actions {
+  display: flex;
+  align-items: center;
+  gap: 13px;
+}
+
+.topbar-live {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+
+  color: var(--green);
+
+  font-size: 9px;
+  font-weight: 800;
+}
+
+.icon-button {
+  position: relative;
+
+  width: 33px;
+  height: 33px;
+
+  display: grid;
+  place-items: center;
+
+  color: var(--muted);
+
+  background:
+    rgba(255, 255, 255, 0.035);
+
+  border:
+    1px solid
+    var(--border);
+
+  border-radius: 9px;
+
+  cursor: pointer;
+}
+
+.notification-dot {
+  position: absolute;
+
+  right: 6px;
+  top: 6px;
+
+  width: 5px;
+  height: 5px;
+
+  border-radius: 50%;
+
+  background: var(--primary);
+}
+
+.operator {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.operator-avatar {
+  width: 29px;
+  height: 29px;
+
+  display: grid;
+  place-items: center;
+
+  background:
+    var(--surface-3);
+
+  border-radius: 8px;
+
+  color: var(--muted);
+
+  font-size: 8px;
+  font-weight: 800;
+}
+
+.operator > div:last-child {
+  display: flex;
+  flex-direction: column;
+}
+
+.operator strong {
+  font-size: 10px;
+}
+
+.operator span {
+  margin-top: 2px;
+
+  color: var(--dim);
+
+  font-size: 8px;
+}
+
+.security-badge {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+
+  padding: 6px 8px;
+
+  color: var(--muted);
+
+  background:
+    rgba(255, 255, 255, 0.025);
+
+  border:
+    1px solid
+    var(--border);
+
+  border-radius: 8px;
+
+  font-size: 8px;
+  font-weight: 750;
+}
+
+/* =========================================================
+   STATUS
+   ========================================================= */
+
+.simulation-state {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+
+  flex: none;
+
+  padding: 7px 9px;
+
+  color: var(--muted);
+
+  background:
+    rgba(255, 255, 255, 0.025);
+
+  border:
+    1px solid
+    var(--border);
+
+  border-radius: 8px;
+
+  font-size: 9px;
+  font-weight: 800;
+}
+
+.simulation-state.emergency {
+  color: #fda4af;
+
+  background:
+    rgba(251, 113, 133, 0.08);
+
+  border-color:
+    rgba(251, 113, 133, 0.25);
+}
+
+/* =========================================================
+   METRIC CARDS
+   ========================================================= */
+
+.metric-card {
+  min-width: 0;
+  min-height: 142px;
+
+  position: relative;
+
+  display: flex;
+  gap: 13px;
+
+  padding: 17px;
+
+  overflow: hidden;
+
+  background:
+    linear-gradient(
+      145deg,
+      #101721,
+      #0c1118
+    );
+
+  border:
+    1px solid
+    var(--border);
+
+  border-radius: 14px;
+}
+
+.metric-icon {
+  width: 31px;
+  height: 31px;
+
+  flex: none;
+
+  display: grid;
+  place-items: center;
+
+  color: var(--primary);
+
+  background:
+    rgba(56, 189, 248, 0.1);
+
+  border-radius: 8px;
+}
+
+.metric-main {
+  min-width: 0;
+}
+
+.metric-value {
+  color: var(--text);
+
+  font-size: 26px;
+  font-weight: 800;
+
+  line-height: 1.05;
+
+  letter-spacing: -0.035em;
+}
+
+.metric-value span {
+  margin-left: 4px;
+
+  color: var(--muted);
+
+  font-size: 11px;
+}
+
+.metric-title {
+  margin-top: 8px;
+
+  color: var(--text);
+
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.metric-subtitle {
+  margin-top: 3px;
+
+  color: var(--dim);
+
+  font-size: 9px;
+}
+
+/* =========================================================
+   PANELS
+   ========================================================= */
+
+.panel {
+  min-width: 0;
+
+  padding: 18px;
+
+  background:
+    var(--surface);
+
+  border:
+    1px solid
+    var(--border);
+
+  border-radius: 14px;
+
+  overflow: hidden;
+}
+
+.panel-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+
+  gap: 15px;
+
+  margin-bottom: 17px;
+}
+
+.panel-header h2 {
+  margin: 5px 0 0;
+
+  color: var(--text);
+
+  font-size: 14px;
+  line-height: 1.25;
+}
+
+.panel-kicker {
+  color: #657488;
+
+  font-size: 8px;
+  font-weight: 800;
+
+  letter-spacing: 0.13em;
+}
+
+/* =========================================================
+   CHART
+   ========================================================= */
+
+.chart-panel {
+  height: 340px;
+}
+
+.chart-wrap {
+  width: 100%;
+  height: 260px;
+}
+
+/* =========================================================
+   SIGNAL LIST
+   ========================================================= */
+
+.signal-list {
+  display: flex;
+  flex-direction: column;
+}
+
+.signal-row {
+  min-height: 50px;
+
+  display: grid;
+
+  grid-template-columns:
+    minmax(80px, 1fr)
+    auto
+    auto;
+
+  align-items: center;
+
+  gap: 10px;
+
+  border-top:
+    1px solid
+    var(--border);
+}
+
+.signal-name {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+
+  font-size: 10px;
+  font-weight: 700;
+}
+
+.signal-dot {
+  width: 7px;
+  height: 7px;
+
+  border-radius: 50%;
+
+  background: var(--red);
+}
+
+.signal-dot.green {
+  background: var(--green);
+
+  box-shadow:
+    0 0 9px
+    rgba(52, 211, 153, 0.55);
+}
+
+.signal-row strong {
+  color: var(--muted);
+
+  font-size: 9px;
+}
+
+/* =========================================================
+   BUTTONS
+   ========================================================= */
+
+.ghost-button,
+.primary-button,
+.emergency-button,
+.danger-button {
+  min-height: 34px;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  gap: 6px;
+
+  padding: 0 11px;
+
+  border-radius: 8px;
+
+  font-size: 9px;
+  font-weight: 800;
+
+  cursor: pointer;
+}
+
+.ghost-button {
+  color: var(--muted);
+
+  background:
+    rgba(255, 255, 255, 0.04);
+
+  border:
+    1px solid
+    var(--border);
+}
+
+.ghost-button:hover {
+  color: var(--text);
+
+  background:
+    rgba(255, 255, 255, 0.08);
+}
+
+.primary-button {
+  color: #061018;
+
+  background:
+    var(--primary);
+
+  border: none;
+}
+
+.primary-button:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.primary-button.full {
+  width: 100%;
+
+  margin-top: 12px;
+}
+
+/* =========================================================
+   SIMULATION TOOLBAR
+   ========================================================= */
+
+.simulation-toolbar {
+  min-height: 56px;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  gap: 12px;
+
+  padding: 10px 14px;
+
+  border-bottom:
+    1px solid
+    var(--border);
+}
+
+.toolbar-title {
+  display: flex;
+  align-items: center;
+
+  gap: 8px;
+
+  font-size: 10px;
+  font-weight: 800;
+}
+
+.toolbar-title svg {
+  color: var(--primary);
+}
+
+.toolbar-actions {
+  display: flex;
+  align-items: center;
+
+  gap: 7px;
+}
+
+/* =========================================================
+   SIMULATION STAGE
+   ========================================================= */
+
+.roundabout-stage {
+  position: relative;
+
+  width: 100%;
+
+  aspect-ratio: 16 / 10;
+
+  min-height: 500px;
+
+  overflow: hidden;
+
+  isolation: isolate;
+
+  background:
+    #081018;
+}
+
+.roundabout-stage::before {
+  content: "";
+
+  position: absolute;
+
+  inset: 0;
+
+  z-index: 0;
+
+  pointer-events: none;
+
+  background:
+    linear-gradient(
+      rgba(255, 255, 255, 0.018) 1px,
+      transparent 1px
+    ),
+    linear-gradient(
+      90deg,
+      rgba(255, 255, 255, 0.018) 1px,
+      transparent 1px
+    );
+
+  background-size:
+    34px 34px;
+}
+
+/* =========================================================
+   ROADS
+   ========================================================= */
+
+.road {
+  position: absolute;
+
+  z-index: 1;
+
+  background:
+    #222b35;
+}
+
+.road-north,
+.road-south {
+  width: 25%;
+  height: 100%;
+
+  left: 37.5%;
+}
+
+.road-east,
+.road-west {
+  width: 100%;
+  height: 25%;
+
+  top: 37.5%;
+}
+
+.road-north::after,
+.road-south::after {
+  content: "";
+
+  position: absolute;
+
+  width: 2px;
+  height: 100%;
+
+  left: 50%;
+
+  background:
+    repeating-linear-gradient(
+      to bottom,
+      transparent 0 18px,
+      rgba(255, 255, 255, 0.15) 18px 28px,
+      transparent 28px 46px
+    );
+}
+
+.road-east::after,
+.road-west::after {
+  content: "";
+
+  position: absolute;
+
+  width: 100%;
+  height: 2px;
+
+  top: 50%;
+
+  background:
+    repeating-linear-gradient(
+      to right,
+      transparent 0 18px,
+      rgba(255, 255, 255, 0.15) 18px 28px,
+      transparent 28px 46px
+    );
+}
+
+/* =========================================================
+   ROUNDABOUT
+   ========================================================= */
+
+.roundabout-ring {
+  position: absolute;
+
+  z-index: 3;
+
+  width: 39%;
+
+  aspect-ratio: 1;
+
+  left: 50%;
+  top: 50%;
+
+  transform:
+    translate(-50%, -50%);
+
+  border:
+    24px solid
+    #202a34;
+
+  border-radius: 50%;
+
+  background:
+    #2a3540;
+
+  box-shadow:
+    0 0 0 1px
+      rgba(255, 255, 255, 0.07),
+    0 20px 55px
+      rgba(0, 0, 0, 0.4);
+}
+
+.roundabout-inner {
+  position: absolute;
+
+  inset: 17%;
+
+  display: flex;
+  flex-direction: column;
+
+  align-items: center;
+  justify-content: center;
+
+  text-align: center;
+
+  border:
+    1px dashed
+    rgba(56, 189, 248, 0.25);
+
+  border-radius: 50%;
+
+  background:
+    #101a21;
+}
+
+.roundabout-inner strong {
+  color: var(--primary);
+
+  font-size: 9px;
+
+  letter-spacing: 0.13em;
+}
+
+.roundabout-inner span {
+  margin-top: 4px;
+
+  color: var(--dim);
+
+  font-size: 7px;
+}
+
+/* =========================================================
+   TRAFFIC LIGHTS
+   ========================================================= */
+
+.traffic-light {
+  position: absolute;
+
+  z-index: 25;
+
+  width: 27px;
+  height: 76px;
+
+  display: flex;
+  flex-direction: column;
+
+  justify-content: space-between;
+  align-items: center;
+
+  padding: 6px 5px;
+
+  background:
+    #10161d;
+
+  border:
+    1px solid
+    rgba(255, 255, 255, 0.14);
+
+  border-radius: 8px;
+
+  cursor: pointer;
+
+  box-shadow:
+    0 7px 18px
+    rgba(0, 0, 0, 0.4);
+}
+
+.traffic-light:hover {
+  border-color:
+    rgba(56, 189, 248, 0.55);
+}
+
+.traffic-light:disabled {
+  opacity: 0.75;
+
+  cursor: not-allowed;
+}
+
+.traffic-light span {
+  width: 11px;
+  height: 11px;
+
+  border-radius: 50%;
+
+  background:
+    #2d343c;
+}
+
+.traffic-light span:nth-child(1).on {
+  background:
+    var(--red);
+
+  box-shadow:
+    0 0 10px
+    rgba(251, 113, 133, 0.9);
+}
+
+.traffic-light span:nth-child(2).on {
+  background:
+    var(--yellow);
+
+  box-shadow:
+    0 0 10px
+    rgba(251, 191, 36, 0.9);
+}
+
+.traffic-light span:nth-child(3).on {
+  background:
+    var(--green);
+
+  box-shadow:
+    0 0 10px
+    rgba(52, 211, 153, 0.9);
+}
+
+.traffic-light b {
+  position: absolute;
+
+  right: -7px;
+  bottom: -7px;
+
+  width: 16px;
+  height: 16px;
+
+  display: grid;
+  place-items: center;
+
+  color: var(--muted);
+
+  background:
+    #0c1218;
+
+  border:
+    1px solid
+    var(--border);
+
+  border-radius: 50%;
+
+  font-size: 7px;
+}
+
+.signal-pos-north {
+  left: 33%;
+  top: 28%;
+}
+
+.signal-pos-south {
+  right: 33%;
+  bottom: 28%;
+}
+
+.signal-pos-east {
+  right: 28%;
+  top: 33%;
+
+  transform:
+    rotate(90deg);
+}
+
+.signal-pos-west {
+  left: 28%;
+  bottom: 33%;
+
+  transform:
+    rotate(90deg);
+}
+
+/* =========================================================
+   VEHICLES
+   ========================================================= */
+
+.sim-vehicle {
+  position: absolute;
+
+  z-index: 12;
+
+  box-sizing: border-box;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  pointer-events: none;
+
+  border-radius: 3px;
+
+  will-change:
+    left,
+    top,
+    transform;
+
+  transition: none !important;
+
+  overflow: visible;
+}
+
+/* Car */
+
+.sim-vehicle.car {
+  background:
+    #d7e0e8;
+
+  border:
+    1px solid
+    rgba(255, 255, 255, 0.45);
+
+  box-shadow:
+    0 2px 6px
+    rgba(0, 0, 0, 0.55);
+}
+
+/* Truck */
+
+.sim-vehicle.truck {
+  background:
+    #9aa8b7;
+
+  border:
+    1px solid
+    rgba(255, 255, 255, 0.25);
+
+  border-radius: 2px;
+
+  box-shadow:
+    0 2px 7px
+    rgba(0, 0, 0, 0.55);
+}
+
+/* Bike */
+
+.sim-vehicle.bike {
+  background:
+    #f0b429;
+
+  border-radius: 50%;
+
+  box-shadow:
+    0 2px 5px
+    rgba(0, 0, 0, 0.5);
+}
+
+/* Vehicle window */
+
+.vehicle-window {
+  position: absolute;
+
+  width: 48%;
+  height: 48%;
+
+  border-radius: 2px;
+
+  background:
+    rgba(25, 38, 52, 0.9);
+
+  pointer-events: none;
+}
+
+/* Truck cargo */
+
+.vehicle-cargo {
+  position: absolute;
+
+  width: 78%;
+  height: 72%;
+
+  border-radius: 2px;
+
+  background:
+    #7d8b99;
+
+  pointer-events: none;
+}
+
+/* Vehicle lights */
+
+.vehicle-light {
+  position: absolute;
+
+  width: 2px;
+  height: 3px;
+
+  border-radius: 50%;
+}
+
+.vehicle-light.front {
+  top: -2px;
+
+  background:
+    #fff7d6;
+}
+
+.vehicle-light.rear {
+  bottom: -2px;
+
+  background:
+    #ef4444;
+}
+
+/* =========================================================
+   AMBULANCE
+   ========================================================= */
+
+.sim-ambulance {
+  position: absolute;
+
+  z-index: 35;
+
+  width: 14px;
+  height: 24px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  box-sizing: border-box;
+
+  color:
+    #dc2626;
+
+  background:
+    #f8fafc;
+
+  border:
+    1px solid
+    #ffffff;
+
+  border-radius: 3px;
+
+  pointer-events: none;
+
+  box-shadow:
+    0 0 12px
+    rgba(239, 68, 68, 0.75);
+
+  will-change:
+    left,
+    top,
+    transform;
+
+  transition:
+    none !important;
+}
+
+.ambulance-light {
+  position: absolute;
+
+  top: -3px;
+
+  width: 6px;
+  height: 2px;
+
+  border-radius: 2px;
+
+  background:
+    #ef4444;
+
+  box-shadow:
+    0 0 7px
+    rgba(239, 68, 68, 0.9);
+}
+
+/* =========================================================
+   LANE MARKINGS
+   ========================================================= */
+
+.lane-mark {
+  position: absolute;
+
+  z-index: 2;
+
+  pointer-events: none;
+
+  opacity: 0.38;
+}
+
+.north-mark,
+.south-mark {
+  width: 2px;
+  height: 20%;
+
+  left: 50%;
+
+  transform:
+    translateX(-50%);
+
+  background:
+    repeating-linear-gradient(
+      to bottom,
+      rgba(255, 255, 255, 0.55) 0 10px,
+      transparent 10px 20px
+    );
+}
+
+.north-mark {
+  top: 0;
+}
+
+.south-mark {
+  bottom: 0;
+}
+
+.east-mark,
+.west-mark {
+  width: 20%;
+  height: 2px;
+
+  top: 50%;
+
+  transform:
+    translateY(-50%);
+
+  background:
+    repeating-linear-gradient(
+      to right,
+      rgba(255, 255, 255, 0.55) 0 10px,
+      transparent 10px 20px
+    );
+}
+
+.east-mark {
+  right: 0;
+}
+
+.west-mark {
+  left: 0;
+}
+
+/* =========================================================
+   SIMULATION LEGEND
+   ========================================================= */
+
+.simulation-legend {
+  display: flex;
+  align-items: center;
+
+  flex-wrap: wrap;
+
+  gap: 14px;
+
+  padding: 10px 14px;
+
+  border-top:
+    1px solid
+    var(--border);
+
+  color:
+    var(--muted);
+
+  font-size: 8px;
+}
+
+.legend-dot {
+  display: inline-block;
+
+  width: 7px;
+  height: 7px;
+
+  margin-right: 5px;
+
+  border-radius: 50%;
+}
+
+.legend-dot.green {
+  background:
+    var(--green);
+}
+
+.legend-dot.red {
+  background:
+    var(--red);
+}
+
+.legend-dot.ambulance {
+  background:
+    var(--red);
+
+  box-shadow:
+    0 0 8px
+    rgba(251, 113, 133, 0.8);
+}
+
+.legend-note {
+  margin-left: auto;
+
+  color:
+    var(--dim);
+}
+
+/* =========================================================
+   CONTROL PANELS
+   ========================================================= */
+
+.simulation-controls {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.control-panel {
+  padding: 16px;
+
+  background:
+    var(--surface);
+
+  border:
+    1px solid
+    var(--border);
+
+  border-radius: 14px;
+}
+
+.control-title {
+  display: flex;
+  align-items: center;
+
+  gap: 8px;
+
+  color:
+    var(--text);
+
+  font-size: 11px;
+  font-weight: 800;
+}
+
+.control-title svg {
+  color:
+    var(--primary);
+}
+
+.control-help {
+  margin: 8px 0 14px;
+
+  color:
+    var(--muted);
+
+  font-size: 9px;
+
+  line-height: 1.55;
+}
+
+/* =========================================================
+   LANE CONTROLS
+   ========================================================= */
+
+.lane-controls {
+  display: flex;
+  flex-direction: column;
+
+  gap: 6px;
+}
+
+.lane-control {
+  width: 100%;
+  height: 40px;
+
+  display: flex;
+  align-items: center;
+
+  gap: 9px;
+
+  padding: 0 10px;
+
+  color:
+    var(--muted);
+
+  background:
+    rgba(255, 255, 255, 0.025);
+
+  border:
+    1px solid
+    var(--border);
+
+  border-radius: 8px;
+
+  cursor: pointer;
+
+  text-align: left;
+}
+
+.lane-control:hover {
+  background:
+    rgba(255, 255, 255, 0.05);
+}
+
+.lane-control.selected {
+  color:
+    var(--text);
+
+  background:
+    rgba(56, 189, 248, 0.07);
+
+  border-color:
+    rgba(56, 189, 248, 0.35);
+}
+
+.lane-control strong {
+  margin-left: auto;
+
+  color:
+    var(--muted);
+
+  font-size: 9px;
+}
+
+.signal-mini {
+  width: 9px;
+  height: 9px;
+
+  flex: none;
+
+  border-radius: 50%;
+
+  background:
+    var(--red);
+}
+
+.signal-mini.green {
+  background:
+    var(--green);
+
+  box-shadow:
+    0 0 8px
+    rgba(52, 211, 153, 0.6);
+}
+
+/* =========================================================
+   EMERGENCY
+   ========================================================= */
+
+.emergency-panel {
+  border-color:
+    rgba(251, 113, 133, 0.18);
+}
+
+.emergency-button {
+  width: 100%;
+
+  min-height: 42px;
+
+  color:
+    #21060c;
+
+  background:
+    var(--red);
+
+  border: none;
+}
+
+.emergency-button:hover {
+  filter:
+    brightness(1.06);
+}
+
+.emergency-active {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  gap: 10px;
+
+  padding: 10px;
+
+  background:
+    rgba(251, 113, 133, 0.07);
+
+  border:
+    1px solid
+    rgba(251, 113, 133, 0.2);
+
+  border-radius: 9px;
+}
+
+.emergency-active > div {
+  min-width: 0;
+
+  display: flex;
+  flex-direction: column;
+
+  gap: 3px;
+}
+
+.emergency-active strong {
+  color:
+    var(--text);
+
+  font-size: 9px;
+}
+
+.emergency-active span {
+  color:
+    #fda4af;
+
+  font-size: 8px;
+}
+
+.danger-button {
+  color:
+    #fda4af;
+
+  background:
+    rgba(251, 113, 133, 0.12);
+
+  border:
+    1px solid
+    rgba(251, 113, 133, 0.2);
+}
+
+/* =========================================================
+   SPEED
+   ========================================================= */
+
+.speed-options {
+  display: grid;
+
+  grid-template-columns:
+    repeat(4, 1fr);
+
+  gap: 6px;
+
+  margin-top: 12px;
+}
+
+.speed-options button {
+  height: 34px;
+
+  color:
+    var(--muted);
+
+  background:
+    rgba(255, 255, 255, 0.035);
+
+  border:
+    1px solid
+    var(--border);
+
+  border-radius: 8px;
+
+  cursor: pointer;
+
+  font-size: 9px;
+  font-weight: 800;
+}
+
+.speed-options button:hover {
+  color:
+    var(--text);
+
+  background:
+    rgba(255, 255, 255, 0.06);
+}
+
+.speed-options button.selected {
+  color:
+    var(--primary);
+
+  background:
+    rgba(56, 189, 248, 0.1);
+
+  border-color:
+    rgba(56, 189, 248, 0.3);
+}
+
+/* =========================================================
+   SIMULATION STATISTICS
+   ========================================================= */
+
+.simulation-stat {
+  display: flex;
+  align-items: center;
+
+  gap: 5px;
+
+  padding: 6px 9px;
+
+  color:
+    var(--muted);
+
+  background:
+    rgba(255, 255, 255, 0.025);
+
+  border:
+    1px solid
+    var(--border);
+
+  border-radius: 7px;
+
+  font-size: 9px;
+  font-weight: 700;
+}
+
+/* =========================================================
+   MOBILE
+   ========================================================= */
+
+.mobile-nav {
+  display: none;
+}
+
+@media (max-width: 950px) {
+
+  .mobile-nav {
+    position: fixed;
+
+    z-index: 200;
+
+    left: 10px;
+    right: 10px;
+    bottom: 10px;
+
+    height: 60px;
+
+    display: grid;
+
+    grid-template-columns:
+      repeat(5, 1fr);
+
+    padding: 4px;
+
+    background:
+      rgba(14, 20, 29, 0.96);
+
+    border:
+      1px solid
+      var(--border);
+
+    border-radius: 15px;
+
+    box-shadow:
+      0 15px 50px
+      rgba(0, 0, 0, 0.45);
+
+    backdrop-filter:
+      blur(18px);
+  }
+
+  .mobile-nav a {
+    display: flex;
+    flex-direction: column;
+
+    align-items: center;
+    justify-content: center;
+
+    gap: 4px;
+
+    color:
+      var(--dim);
+
+    border-radius: 11px;
+
+    font-size: 8px;
+    font-weight: 700;
+  }
+
+  .mobile-nav a.active {
+    color:
+      var(--primary);
+
+    background:
+      rgba(56, 189, 248, 0.1);
+  }
+}
+
+/* =========================================================
+   SMALL MOBILE
+   ========================================================= */
+
+@media (max-width: 650px) {
+
+  .operator,
+  .security-badge {
+    display: none;
+  }
+
+  .topbar {
+    padding:
+      0 15px;
+  }
+
+  .topbar-location span {
+    display: none;
+  }
+
+  .simulation-toolbar {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .toolbar-actions {
+    width: 100%;
+
+    flex-wrap: wrap;
+  }
+
+  .roundabout-stage {
+    min-height: 410px;
+
+    aspect-ratio: auto;
+  }
+
+  .roundabout-ring {
+    width: 48%;
+
+    border-width: 17px;
+  }
+
+  .simulation-legend {
+    gap: 9px;
+  }
+
+  .legend-note {
+    width: 100%;
+
+    margin-left: 0;
+  }
+
+  .speed-options {
+    grid-template-columns:
+      repeat(4, 1fr);
+  }
+}

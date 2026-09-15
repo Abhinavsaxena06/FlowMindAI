@@ -1,0 +1,481 @@
+/* =========================================================
+   FLOWMIND
+   GLOBAL STYLES
+   ========================================================= */
+
+/* =========================================================
+   ROOT VARIABLES
+   ========================================================= */
+
+:root {
+  /* Typography */
+  font-family:
+    Inter,
+    ui-sans-serif,
+    system-ui,
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    sans-serif;
+
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+
+  /* Main backgrounds */
+  --bg: #070a0f;
+  --bg-soft: #0a1017;
+
+  /* Surfaces */
+  --surface: #0e141d;
+  --surface-2: #121a25;
+  --surface-3: #182230;
+
+  /* Borders */
+  --border: rgba(255, 255, 255, 0.08);
+  --border-strong: rgba(255, 255, 255, 0.14);
+
+  /* Text */
+  --text: #edf2f8;
+  --muted: #94a0b2;
+  --dim: #657184;
+
+  /* Primary */
+  --primary: #38bdf8;
+  --primary-soft: rgba(56, 189, 248, 0.12);
+
+  /* Status colors */
+  --green: #34d399;
+  --green-soft: rgba(52, 211, 153, 0.12);
+
+  --yellow: #fbbf24;
+  --yellow-soft: rgba(251, 191, 36, 0.12);
+
+  --red: #fb7185;
+  --red-soft: rgba(251, 113, 133, 0.12);
+
+  --purple: #a78bfa;
+  --purple-soft: rgba(167, 139, 250, 0.12);
+
+  /* Layout */
+  --sidebar: 248px;
+  --topbar: 70px;
+
+  /* Radius */
+  --radius-sm: 7px;
+  --radius-md: 10px;
+  --radius-lg: 14px;
+  --radius-xl: 18px;
+
+  /* Shadows */
+  --shadow:
+    0 12px 35px rgba(0, 0, 0, 0.22);
+
+  --shadow-lg:
+    0 20px 65px rgba(0, 0, 0, 0.36);
+
+  /* Animation */
+  --transition: 160ms ease;
+}
+
+/* =========================================================
+   RESET
+   ========================================================= */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  width: 100%;
+  min-width: 320px;
+  min-height: 100%;
+
+  margin: 0;
+  padding: 0;
+
+  background: var(--bg);
+
+  scroll-behavior: smooth;
+}
+
+body {
+  width: 100%;
+  min-width: 320px;
+  min-height: 100vh;
+
+  margin: 0;
+  padding: 0;
+
+  background:
+    radial-gradient(
+      circle at 85% -10%,
+      rgba(56, 189, 248, 0.07),
+      transparent 28%
+    ),
+    linear-gradient(
+      180deg,
+      #070a0f 0%,
+      #080c12 100%
+    );
+
+  color: var(--text);
+
+  overflow-x: hidden;
+}
+
+#root {
+  width: 100%;
+  min-width: 320px;
+  min-height: 100vh;
+}
+
+/* =========================================================
+   TYPOGRAPHY
+   ========================================================= */
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p {
+  margin-top: 0;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  color: var(--text);
+  font-weight: 700;
+}
+
+p {
+  color: var(--muted);
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p,
+span,
+strong,
+small,
+label,
+button,
+input,
+select,
+textarea {
+  overflow-wrap: break-word;
+}
+
+/* =========================================================
+   LINKS
+   ========================================================= */
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+a:focus-visible {
+  outline: 2px solid var(--primary);
+  outline-offset: 3px;
+}
+
+/* =========================================================
+   BUTTONS
+   ========================================================= */
+
+button {
+  margin: 0;
+  padding: 0;
+
+  border: 0;
+  outline: none;
+
+  font: inherit;
+  color: inherit;
+  background: transparent;
+}
+
+button:focus-visible {
+  outline: 2px solid var(--primary);
+  outline-offset: 3px;
+}
+
+button:disabled {
+  cursor: not-allowed;
+}
+
+/* =========================================================
+   FORM ELEMENTS
+   ========================================================= */
+
+input,
+select,
+textarea,
+button {
+  font: inherit;
+}
+
+input,
+select,
+textarea {
+  max-width: 100%;
+
+  color: var(--text);
+  background: var(--surface);
+
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+}
+
+input::placeholder,
+textarea::placeholder {
+  color: var(--dim);
+}
+
+input:focus,
+select:focus,
+textarea:focus {
+  outline: none;
+
+  border-color:
+    rgba(56, 189, 248, 0.5);
+
+  box-shadow:
+    0 0 0 3px
+    rgba(56, 189, 248, 0.08);
+}
+
+/* =========================================================
+   MEDIA
+   ========================================================= */
+
+img,
+svg,
+video,
+canvas {
+  display: block;
+  max-width: 100%;
+}
+
+img {
+  height: auto;
+}
+
+/* =========================================================
+   SELECTION
+   ========================================================= */
+
+::selection {
+  color: var(--text);
+  background: rgba(56, 189, 248, 0.25);
+}
+
+/* =========================================================
+   SCROLLBAR
+   ========================================================= */
+
+::-webkit-scrollbar {
+  width: 7px;
+  height: 7px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.13);
+  border-radius: 999px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.22);
+}
+
+* {
+  scrollbar-width: thin;
+  scrollbar-color:
+    rgba(255, 255, 255, 0.14)
+    transparent;
+}
+
+/* =========================================================
+   COMMON PAGE STRUCTURE
+   ========================================================= */
+
+.page {
+  width: 100%;
+  min-width: 0;
+}
+
+.eyebrow {
+  color: var(--primary);
+
+  font-size: 9px;
+  font-weight: 800;
+
+  letter-spacing: 0.16em;
+  line-height: 1.4;
+}
+
+.page-loading {
+  width: 100%;
+  min-height: 50vh;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  gap: 10px;
+
+  color: var(--muted);
+
+  font-size: 12px;
+}
+
+/* =========================================================
+   LOADER
+   ========================================================= */
+
+.loader,
+.spinner {
+  width: 21px;
+  height: 21px;
+
+  flex: none;
+
+  border:
+    2px solid
+    rgba(255, 255, 255, 0.12);
+
+  border-top-color:
+    var(--primary);
+
+  border-radius: 50%;
+
+  animation:
+    flowmind-spin
+    700ms
+    linear
+    infinite;
+}
+
+@keyframes flowmind-spin {
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* =========================================================
+   STATUS DOTS
+   ========================================================= */
+
+.status-dot {
+  width: 7px;
+  height: 7px;
+
+  display: inline-block;
+  flex: none;
+
+  border-radius: 50%;
+
+  background: #64748b;
+}
+
+.status-dot.live {
+  background: var(--green);
+
+  box-shadow:
+    0 0 0 4px
+      rgba(52, 211, 153, 0.08),
+    0 0 12px
+      rgba(52, 211, 153, 0.55);
+}
+
+/* =========================================================
+   TEXT UTILITIES
+   ========================================================= */
+
+.text-primary {
+  color: var(--primary);
+}
+
+.text-success {
+  color: var(--green);
+}
+
+.text-warning {
+  color: var(--yellow);
+}
+
+.text-danger {
+  color: var(--red);
+}
+
+.text-muted {
+  color: var(--muted);
+}
+
+.text-dim {
+  color: var(--dim);
+}
+
+/* =========================================================
+   VISIBILITY HELPERS
+   ========================================================= */
+
+.desktop-only {
+  display: block;
+}
+
+.mobile-only {
+  display: none;
+}
+
+/* =========================================================
+   MOBILE GLOBAL SETTINGS
+   ========================================================= */
+
+@media (max-width: 950px) {
+  :root {
+    --sidebar: 0px;
+    --topbar: 62px;
+  }
+
+  .desktop-only {
+    display: none;
+  }
+
+  .mobile-only {
+    display: block;
+  }
+}
+
+@media (max-width: 650px) {
+  html {
+    font-size: 15px;
+  }
+
+  body {
+    min-width: 320px;
+  }
+}

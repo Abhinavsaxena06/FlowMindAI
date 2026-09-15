@@ -1,0 +1,327 @@
+/* =========================================================
+   FLOWMIND LAYOUT
+   ========================================================= */
+
+.app-shell {
+  width: 100%;
+  min-height: 100vh;
+}
+
+
+/* =========================================================
+   SIDEBAR
+   ========================================================= */
+
+.sidebar {
+  position: fixed;
+  z-index: 100;
+
+  top: 0;
+  left: 0;
+  bottom: 0;
+
+  width: var(--sidebar);
+
+  display: flex;
+  flex-direction: column;
+
+  background: #090e15;
+
+  border-right: 1px solid var(--border);
+
+  padding: 18px 12px;
+}
+
+
+/* =========================================================
+   MAIN
+   ========================================================= */
+
+.main-shell {
+  width: calc(100% - var(--sidebar));
+
+  min-height: 100vh;
+
+  margin-left: var(--sidebar);
+}
+
+
+/* =========================================================
+   TOPBAR
+   ========================================================= */
+
+.topbar {
+  position: sticky;
+  z-index: 50;
+
+  top: 0;
+
+  width: 100%;
+  height: var(--topbar);
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  gap: 20px;
+
+  padding:
+    0
+    clamp(18px, 2.4vw, 34px);
+
+  background:
+    rgba(7, 10, 15, 0.94);
+
+  backdrop-filter: blur(14px);
+
+  border-bottom:
+    1px solid var(--border);
+}
+
+
+/* =========================================================
+   PAGE
+   ========================================================= */
+
+.page-content {
+  width: 100%;
+  min-width: 0;
+
+  padding:
+    clamp(22px, 3vw, 34px)
+    clamp(20px, 3vw, 40px)
+    60px;
+}
+
+
+/* =========================================================
+   PAGE HEADING
+   ========================================================= */
+
+.page-heading {
+  width: 100%;
+
+  display: flex;
+
+  align-items: flex-end;
+  justify-content: space-between;
+
+  gap: 30px;
+
+  margin-bottom: 24px;
+}
+
+.page-heading > div:first-child {
+  min-width: 0;
+}
+
+.page-heading h1 {
+  margin: 8px 0 10px;
+
+  font-size:
+    clamp(30px, 3vw, 44px);
+
+  line-height: 1.05;
+
+  letter-spacing: -0.04em;
+}
+
+.page-heading p {
+  max-width: 700px;
+
+  margin: 0;
+
+  font-size: 13px;
+
+  line-height: 1.65;
+}
+
+
+/* =========================================================
+   HERO
+   ========================================================= */
+
+.hero {
+  display: flex;
+
+  align-items: flex-end;
+  justify-content: space-between;
+
+  gap: 25px;
+
+  margin-bottom: 25px;
+}
+
+.hero-copy {
+  min-width: 0;
+}
+
+.hero h1 {
+  margin: 8px 0 12px;
+
+  font-size:
+    clamp(34px, 4vw, 52px);
+
+  line-height: 1.04;
+
+  letter-spacing: -0.045em;
+}
+
+.hero p {
+  max-width: 680px;
+
+  margin: 0;
+
+  font-size: 13px;
+
+  line-height: 1.65;
+}
+
+
+/* =========================================================
+   DASHBOARD GRID
+   ========================================================= */
+
+.metrics-grid {
+  display: grid;
+
+  grid-template-columns:
+    repeat(
+      4,
+      minmax(0, 1fr)
+    );
+
+  gap: 14px;
+
+  margin-bottom: 18px;
+}
+
+.dashboard-grid {
+  display: grid;
+
+  grid-template-columns:
+    minmax(0, 1.5fr)
+    minmax(300px, 0.9fr);
+
+  gap: 18px;
+
+  margin-bottom: 18px;
+}
+
+
+/* =========================================================
+   SIMULATION
+   ========================================================= */
+
+.simulation-layout {
+  width: 100%;
+
+  display: grid;
+
+  grid-template-columns:
+    minmax(0, 1fr)
+    330px;
+
+  gap: 18px;
+
+  align-items: start;
+}
+
+.simulation-card {
+  min-width: 0;
+}
+
+.simulation-controls {
+  min-width: 0;
+
+  display: flex;
+  flex-direction: column;
+
+  gap: 12px;
+}
+
+
+/* =========================================================
+   RESPONSIVE
+   ========================================================= */
+
+@media (max-width: 1250px) {
+
+  .metrics-grid {
+    grid-template-columns:
+      repeat(2, minmax(0, 1fr));
+  }
+
+  .dashboard-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .simulation-layout {
+    grid-template-columns:
+      minmax(0, 1fr)
+      300px;
+  }
+
+}
+
+
+@media (max-width: 950px) {
+
+  :root {
+    --sidebar: 0px;
+    --topbar: 62px;
+  }
+
+  .sidebar {
+    display: none;
+  }
+
+  .main-shell {
+    width: 100%;
+    margin-left: 0;
+  }
+
+  .page-content {
+    padding-bottom: 90px;
+  }
+
+  .simulation-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .mobile-nav {
+    display: grid;
+  }
+
+}
+
+
+@media (max-width: 650px) {
+
+  .page-content {
+    padding:
+      18px
+      14px
+      88px;
+  }
+
+  .hero,
+  .page-heading {
+    flex-direction: column;
+
+    align-items: flex-start;
+  }
+
+  .metrics-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .dashboard-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .simulation-layout {
+    grid-template-columns: 1fr;
+  }
+
+}
