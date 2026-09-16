@@ -8,6 +8,7 @@ import {
   getTrafficForecast,
   getTrafficRecommendation,
   getTrafficResult,
+  startTraffic,
 } from "../services/api";
 
 
@@ -46,6 +47,7 @@ export default function useFlowMindControl() {
   useEffect(() => {
 
     let mounted = true;
+    startTraffic().catch(() => {});
 
 
     async function load() {
