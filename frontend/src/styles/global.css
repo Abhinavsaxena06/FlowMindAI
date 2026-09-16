@@ -26,12 +26,12 @@
 
   /* Core palette */
   --bg-primary: #050914;
-  --bg-secondary: #0A1020;
+  --bg-secondary: #0a2017;
   --bg-card: #101827;
-  --bg-card-hover: #152238;
+  --bg-card-hover: #125bda;
   --bg-card-strong: #18273d;
 
-  --border: #24344D;
+  --border: #2457a8;
   --border-strong: #2e415d;
 
   --text-primary: #F8FAFC;
@@ -39,9 +39,9 @@
   --text-muted: #7F8EA3;
   --text-soft: #9AA7B8;
 
-  --accent: #00D9FF;
+  --accent: #35737c;
   --accent-secondary: #3B82F6;
-  --accent-soft: rgba(0, 217, 255, 0.14);
+  --accent-soft: rgba(30, 201, 231, 0.14);
 
   --success: #22C55E;
   --success-soft: rgba(34, 197, 94, 0.14);

@@ -577,6 +577,9 @@
   display: flex;
   flex-direction: column;
   gap: 22px;
+  background: rgba(164, 195, 202, 0.96);
+
+
 }
 
 .predictions-header {
@@ -670,7 +673,7 @@
   padding: 18px;
   border: 1px solid var(--border);
   border-radius: 16px;
-  background: rgba(10, 16, 32, 0.72);
+  background: rgba(134, 215, 233, 0.96);
 }
 
 .prediction-header {
