@@ -24,9 +24,7 @@ export default function TrafficStatus({
     Number(score || 0);
 
   return (
-    <div
-      className={`traffic-status ${tone}`}
-    >
+    <div className={`traffic-status ${tone}`}>
       <div className="traffic-status-icon">
         {normal ? (
           <CheckCircle2 size={19} />
@@ -35,18 +33,12 @@ export default function TrafficStatus({
         )}
       </div>
 
-      <div className="traffic-status-content">
+      <div className="traffic-status-copy">
         <span>TRAFFIC STATUS</span>
-
         <strong>{label}</strong>
-
-        <p>
-          Congestion score{" "}
-          <b>
-            {scoreValue.toFixed(0)}
-          </b>
-          /100
-        </p>
+        <small>
+          Congestion score {scoreValue.toFixed(0)} / 100
+        </small>
       </div>
     </div>
   );

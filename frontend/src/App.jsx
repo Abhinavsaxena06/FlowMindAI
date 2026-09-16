@@ -12,6 +12,7 @@ import Predictions from "./pages/Predictions";
 import SignalControl from "./pages/SignalControl";
 import NetworkView from "./pages/NetworkView";
 import Simulation from "./pages/Simulation";
+import PedestrianSafety from "./pages/PedestrianSafety";
 
 export default function App() {
   return (
@@ -46,6 +47,11 @@ export default function App() {
         <Route
           path="/simulation"
           element={<Simulation />}
+        />
+
+        <Route
+          path="/pedestrian-safety"
+          element={<PedestrianSafety />}
         />
 
         <Route

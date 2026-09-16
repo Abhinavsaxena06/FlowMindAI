@@ -10,6 +10,7 @@ const platformLinks = [
   { label: "Network", to: "/network" },
   { label: "Traffic Updates", to: "/live" },
   { label: "Predictions", to: "/predictions" },
+  { label: "Pedestrian Safety", to: "/pedestrian-safety" },
   { label: "Signal Controls", to: "/signals" },
 ];
 

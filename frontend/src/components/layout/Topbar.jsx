@@ -14,6 +14,7 @@ const pageNames = {
   "/": "Overview",
   "/live": "Live Monitoring",
   "/predictions": "AI Predictions",
+  "/pedestrian-safety": "Pedestrian Safety",
   "/signals": "Signal Control",
   "/network": "Network",
   "/simulation": "Simulation",

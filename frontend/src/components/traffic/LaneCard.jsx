@@ -20,7 +20,7 @@ export default function LaneCard({
 
       <div className="lane-card-top">
 
-        <div>
+        <div className="lane-card-heading">
           <span className="eyebrow">
             APPROACH
           </span>
@@ -34,8 +34,10 @@ export default function LaneCard({
 
       </div>
 
-      <div className="lane-number">
-        {count}
+      <div className="lane-number-row">
+        <div className="lane-number">
+          {count}
+        </div>
       </div>
 
       <div className="lane-meta">
@@ -47,8 +49,8 @@ export default function LaneCard({
 
         <span>
           <Gauge size={14} />
-          {Number(speed).toFixed(1)}
-          km/h
+          <strong>{Number(speed).toFixed(1)}</strong>
+          <em>km/h</em>
         </span>
 
       </div>

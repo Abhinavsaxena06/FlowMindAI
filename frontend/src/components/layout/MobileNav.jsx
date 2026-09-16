@@ -1,6 +1,7 @@
 import {
   BrainCircuit,
   CircleGauge,
+  Footprints,
   LayoutDashboard,
   Radio,
   TrafficCone,
@@ -25,6 +26,11 @@ const items = [
     label: "AI",
     path: "/predictions",
     icon: BrainCircuit,
+  },
+  {
+    label: "Ped",
+    path: "/pedestrian-safety",
+    icon: Footprints,
   },
   {
     label: "Signals",

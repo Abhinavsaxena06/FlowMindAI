@@ -437,6 +437,61 @@ function createInitialVehicles() {
   return vehicles;
 }
 
+function resolveAmbulanceStatus(ambulance) {
+  if (!ambulance) {
+    return "IDLE";
+  }
+
+  if (ambulance.state === "approaching") {
+    const road = ROAD[ambulance.direction];
+    const dx = road.entry.x - ambulance.x;
+    const dy = road.entry.y - ambulance.y;
+    const distanceToEntry = Math.sqrt(dx * dx + dy * dy);
+
+    if (distanceToEntry <= 8) {
+      return "SIGNAL_PRIORITY";
+    }
+
+    return "APPROACHING";
+  }
+
+  if (ambulance.state === "roundabout") {
+    return "CORRIDOR_ACTIVE";
+  }
+
+  if (ambulance.state === "exiting") {
+    return "PASSED";
+  }
+
+  return "REQUESTED";
+}
+
+function buildAmbulanceState(direction, selectedSignals) {
+  const route = [
+    direction,
+    oppositeLane(direction),
+  ];
+
+  const currentSignal =
+    selectedSignals[direction] || "green";
+
+  return {
+    active: true,
+    direction,
+    currentPosition: {
+      x: ROAD[direction].spawn.x,
+      y: ROAD[direction].spawn.y,
+    },
+    destination: oppositeLane(direction),
+    route,
+    currentSignal,
+    status: "REQUESTED",
+    priorityIntersection: "JUNCTION A",
+    nextIntersection: "JUNCTION A",
+    remainingPriorityTime: 18,
+  };
+}
+
 function lerp(a, b, t) {
   return (
     a +
@@ -1353,6 +1408,22 @@ export default function Simulation() {
     setAmbulance,
   ] = useState(null);
 
+  const [
+    ambulanceState,
+    setAmbulanceState,
+  ] = useState({
+    active: false,
+    direction: null,
+    currentPosition: null,
+    destination: null,
+    route: [],
+    currentSignal: null,
+    status: "IDLE",
+    priorityIntersection: "JUNCTION A",
+    nextIntersection: "JUNCTION A",
+    remainingPriorityTime: 0,
+  });
+
   const runningRef =
     useRef(true);
 
@@ -1463,6 +1534,42 @@ export default function Simulation() {
   backendRecommendation,
   backendConnected,
 ]);
+
+  useEffect(() => {
+    if (!ambulance) {
+      setAmbulanceState({
+        active: false,
+        direction: null,
+        currentPosition: null,
+        destination: null,
+        route: [],
+        currentSignal: null,
+        status: "IDLE",
+        priorityIntersection: "JUNCTION A",
+        nextIntersection: "JUNCTION A",
+        remainingPriorityTime: 0,
+      });
+      return;
+    }
+
+    const nextStatus = resolveAmbulanceStatus(ambulance);
+
+    setAmbulanceState({
+      active: true,
+      direction: ambulance.direction,
+      currentPosition: {
+        x: ambulance.x,
+        y: ambulance.y,
+      },
+      destination: ambulance.destination,
+      route: ambulance.route || [ambulance.direction, oppositeLane(ambulance.direction)],
+      currentSignal: signalsRef.current[ambulance.direction] || "green",
+      status: nextStatus,
+      priorityIntersection: "JUNCTION A",
+      nextIntersection: ambulance.destination ? `${ambulance.destination.toUpperCase()} EXIT` : "JUNCTION A",
+      remainingPriorityTime: Math.max(0, 18 - (ambulance.turnProgress || 0) * 18),
+    });
+  }, [ambulance]);
 
   useEffect(() => {
     setSimulationStats(
@@ -1593,12 +1700,45 @@ export default function Simulation() {
               multiplier
             );
 
-          setAmbulance(
-            nextAmbulance
-          );
+          if (nextAmbulance) {
+            const safeAmbulance = {
+              ...nextAmbulance,
+              route:
+                nextAmbulance.route ||
+                [
+                  nextAmbulance.direction,
+                  oppositeLane(
+                    nextAmbulance.direction
+                  ),
+                ],
+              status: resolveAmbulanceStatus(nextAmbulance),
+              currentSignal:
+                signalsRef.current[
+                  nextAmbulance.direction
+                ] || "green",
+            };
 
-          ambulanceRef.current =
-            nextAmbulance;
+            setAmbulance(safeAmbulance);
+            ambulanceRef.current =
+              safeAmbulance;
+          } else {
+            setAmbulance(null);
+            ambulanceRef.current = null;
+            setSignals(previousSignalsRef.current);
+            signalsRef.current = previousSignalsRef.current;
+            setAmbulanceState({
+              active: false,
+              direction: null,
+              currentPosition: null,
+              destination: null,
+              route: [],
+              currentSignal: null,
+              status: "IDLE",
+              priorityIntersection: "JUNCTION A",
+              nextIntersection: "JUNCTION A",
+              remainingPriorityTime: 0,
+            });
+          }
         }
       }
 
@@ -1662,7 +1802,7 @@ export default function Simulation() {
     }
 
     previousSignalsRef.current =
-      signalsRef.current;
+      { ...signalsRef.current };
 
     const next = {};
 
@@ -1676,11 +1816,17 @@ export default function Simulation() {
     );
 
     setSignals(next);
+    signalsRef.current = next;
 
     const spawn =
       ROAD[
         selectedLane
       ].spawn;
+
+    const emergencyRoute = [
+      selectedLane,
+      oppositeLane(selectedLane),
+    ];
 
     const newAmbulance = {
       direction:
@@ -1691,8 +1837,14 @@ export default function Simulation() {
           selectedLane
         ),
 
+      route: emergencyRoute,
+
       state:
         "approaching",
+
+      status: "REQUESTED",
+
+      currentSignal: "green",
 
       x: spawn.x,
 
@@ -1712,6 +1864,13 @@ export default function Simulation() {
 
     ambulanceRef.current =
       newAmbulance;
+
+    setAmbulanceState(
+      buildAmbulanceState(
+        selectedLane,
+        next
+      )
+    );
   }
 
   function cancelEmergency() {
@@ -1723,6 +1882,20 @@ export default function Simulation() {
     setSignals(
       previousSignalsRef.current
     );
+    signalsRef.current = previousSignalsRef.current;
+
+    setAmbulanceState({
+      active: false,
+      direction: null,
+      currentPosition: null,
+      destination: null,
+      route: [],
+      currentSignal: null,
+      status: "IDLE",
+      priorityIntersection: "JUNCTION A",
+      nextIntersection: "JUNCTION A",
+      remainingPriorityTime: 0,
+    });
   }
 
   function resetSimulation() {
@@ -1759,6 +1932,19 @@ export default function Simulation() {
     ambulanceRef.current =
       null;
 
+    setAmbulanceState({
+      active: false,
+      direction: null,
+      currentPosition: null,
+      destination: null,
+      route: [],
+      currentSignal: null,
+      status: "IDLE",
+      priorityIntersection: "JUNCTION A",
+      nextIntersection: "JUNCTION A",
+      remainingPriorityTime: 0,
+    });
+
     setSimulationSpeed(1);
 
     speedRef.current = 1;
@@ -1768,6 +1954,12 @@ export default function Simulation() {
 
   const currentVehicles =
     simulationStats.currentVehicles;
+
+  const emergencyStatus =
+    ambulanceState.status ||
+    (ambulance
+      ? resolveAmbulanceStatus(ambulance)
+      : "IDLE");
 
   const waitingVehicles =
     simulationStats.waitingVehicles;
@@ -2299,20 +2491,32 @@ export default function Simulation() {
               >
                 <Zap size={17} />
 
-                Dispatch ambulance
+                GO AMBULANCE
               </button>
             ) : (
               <div className="emergency-active">
 
                 <div>
                   <strong>
-                    Ambulance active
+                    🚑 EMERGENCY ACTIVE
                   </strong>
 
                   <span>
                     {ambulance.direction.toUpperCase()}
                     {" "}
-                    approach
+                    approach · {emergencyStatus}
+                  </span>
+                </div>
+
+                <div className="emergency-meta">
+                  <span>
+                    Corridor: {ambulanceState.active ? "ACTIVE" : "STANDBY"}
+                  </span>
+                  <span>
+                    Signal: {ambulanceState.currentSignal?.toUpperCase() || "GREEN"}
+                  </span>
+                  <span>
+                    Priority: {ambulanceState.priorityIntersection}
                   </span>
                 </div>
 
@@ -2322,7 +2526,7 @@ export default function Simulation() {
                     cancelEmergency
                   }
                 >
-                  Cancel
+                  END EMERGENCY
                 </button>
 
               </div>

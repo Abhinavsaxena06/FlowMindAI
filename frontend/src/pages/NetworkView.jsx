@@ -511,13 +511,13 @@ export default function NetworkView() {
                 <YAxis tickLine={false} axisLine={false} tick={{ fill: "#94a3b8", fontSize: 10 }} />
                 <Tooltip
                   contentStyle={{
-                    background: "#0b1726",
-                    border: "1px solid rgba(148, 163, 184, 0.18)",
+                    background: "#0A1020",
+                    border: "1px solid #24344D",
                     borderRadius: 12,
-                    color: "#f8fafc",
+                    color: "#F8FAFC",
                   }}
                 />
-                <Line type="monotone" dataKey="vehicles" stroke="#22d3ee" strokeWidth={2.5} dot={false} />
+                <Line type="monotone" dataKey="vehicles" stroke="#00D9FF" strokeWidth={2.5} dot={false} />
               </LineChart>
             </ResponsiveContainer>
           </div>
@@ -554,13 +554,13 @@ export default function NetworkView() {
                   <YAxis tickLine={false} axisLine={false} tick={{ fill: "#94a3b8", fontSize: 10 }} />
                   <Tooltip
                     contentStyle={{
-                      background: "#0b1726",
-                      border: "1px solid rgba(148, 163, 184, 0.18)",
+                      background: "#0A1020",
+                      border: "1px solid #24344D",
                       borderRadius: 12,
-                      color: "#f8fafc",
+                      color: "#F8FAFC",
                     }}
                   />
-                  <Line type="monotone" dataKey="queue" stroke="#f59e0b" strokeWidth={2.5} dot={false} />
+                  <Line type="monotone" dataKey="queue" stroke="#F59E0B" strokeWidth={2.5} dot={false} />
                 </LineChart>
               </ResponsiveContainer>
             </div>
@@ -595,13 +595,13 @@ export default function NetworkView() {
                   <YAxis tickLine={false} axisLine={false} tick={{ fill: "#94a3b8", fontSize: 10 }} />
                   <Tooltip
                     contentStyle={{
-                      background: "#0b1726",
-                      border: "1px solid rgba(148, 163, 184, 0.18)",
+                      background: "#0A1020",
+                      border: "1px solid #24344D",
                       borderRadius: 12,
-                      color: "#f8fafc",
+                      color: "#F8FAFC",
                     }}
                   />
-                  <Line type="monotone" dataKey="waiting" stroke="#22c55e" strokeWidth={2.5} dot={false} />
+                  <Line type="monotone" dataKey="waiting" stroke="#22C55E" strokeWidth={2.5} dot={false} />
                 </LineChart>
               </ResponsiveContainer>
             </div>
@@ -683,16 +683,16 @@ export default function NetworkView() {
                   <YAxis tickLine={false} axisLine={false} tick={{ fill: "#94a3b8", fontSize: 10 }} />
                   <Tooltip
                     contentStyle={{
-                      background: "#0b1726",
-                      border: "1px solid rgba(148, 163, 184, 0.18)",
+                      background: "#0A1020",
+                      border: "1px solid #24344D",
                       borderRadius: 12,
-                      color: "#f8fafc",
+                      color: "#F8FAFC",
                     }}
                   />
-                  <Bar dataKey="north" fill="#22d3ee" radius={[4, 4, 0, 0]} />
-                  <Bar dataKey="south" fill="#38bdf8" radius={[4, 4, 0, 0]} />
-                  <Bar dataKey="east" fill="#60a5fa" radius={[4, 4, 0, 0]} />
-                  <Bar dataKey="west" fill="#93c5fd" radius={[4, 4, 0, 0]} />
+                  <Bar dataKey="north" fill="#00D9FF" radius={[4, 4, 0, 0]} />
+                  <Bar dataKey="south" fill="#3B82F6" radius={[4, 4, 0, 0]} />
+                  <Bar dataKey="east" fill="#60A5FA" radius={[4, 4, 0, 0]} />
+                  <Bar dataKey="west" fill="#93C5FD" radius={[4, 4, 0, 0]} />
                 </BarChart>
               </ResponsiveContainer>
             </div>

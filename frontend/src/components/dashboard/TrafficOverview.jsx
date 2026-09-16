@@ -117,11 +117,10 @@ export default function TrafficOverview({
 
               <Tooltip
                 contentStyle={{
-                  background:
-                    "#10151d",
-                  border:
-                    "1px solid #27313d",
+                  background: "#0A1020",
+                  border: "1px solid #24344D",
                   borderRadius: 10,
+                  color: "#F8FAFC",
                 }}
               />
 
