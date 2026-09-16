@@ -1,4 +1,6 @@
+
 import { useEffect, useRef, useState } from "react";
+import useFlowMindControl from "../hooks/useFlowMindControl";
 import {
   Ambulance,
   Car,
@@ -610,7 +612,8 @@ function distance(
     a.y - b.y;
 
   return Math.sqrt(
-    dx * dx + dy * dy
+    dx * dx +
+    dy * dy
   );
 }
 
@@ -1262,6 +1265,13 @@ function updateAmbulance(
 }
 
 export default function Simulation() {
+  const {
+    state: backendTraffic,
+    recommendation: backendRecommendation,
+    result: backendResult,
+    connected: backendConnected,
+  } = useFlowMindControl();
+
   const [
     running,
     setRunning,
@@ -1359,6 +1369,8 @@ export default function Simulation() {
     useRef(
       INITIAL_SIGNALS
     );
+  const manualSignalOverrideRef =
+   useRef(false);
 
   useEffect(() => {
     runningRef.current =
@@ -1379,6 +1391,78 @@ export default function Simulation() {
     ambulanceRef.current =
       ambulance;
   }, [ambulance]);
+
+  /*
+   * ============================================================
+   * FLOWMIND BACKEND → SIMULATION SIGNAL CONTROL
+   * ============================================================
+   *
+   * When the backend recommends a phase,
+   * the visual digital-twin signal follows it.
+   *
+   * Existing ambulance priority is preserved.
+   */
+  useEffect(() => {
+  const strategy =
+    backendRecommendation?.recommended_strategy;
+
+  const phase =
+    strategy?.phase;
+
+  if (!backendConnected) {
+    return;
+  }
+
+  if (!phase) {
+    return;
+  }
+
+  const normalizedPhase =
+    String(phase).toLowerCase();
+
+  if (!LANES.includes(normalizedPhase)) {
+    return;
+  }
+
+  /*
+   * Manual signal control has priority.
+   * The backend must not immediately
+   * overwrite the user's selection.
+   */
+  if (
+    manualSignalOverrideRef.current
+  ) {
+    return;
+  }
+
+  /*
+   * Emergency ambulance control
+   * always has priority.
+   */
+  if (ambulanceRef.current) {
+    return;
+  }
+
+  const next = {};
+
+  LANES.forEach((lane) => {
+    next[lane] =
+      lane === normalizedPhase
+        ? "green"
+        : "red";
+  });
+
+  previousSignalsRef.current =
+    signalsRef.current;
+
+  setSignals(next);
+  setSelectedLane(
+    normalizedPhase
+  );
+}, [
+  backendRecommendation,
+  backendConnected,
+]);
 
   useEffect(() => {
     setSimulationStats(
@@ -1537,31 +1621,38 @@ export default function Simulation() {
   }, []);
 
   function giveGreen(
-    lane
+  lane
+) {
+  if (
+    ambulanceRef.current
   ) {
-    if (
-      ambulanceRef.current
-    ) {
-      return;
-    }
-
-    previousSignalsRef.current =
-      signalsRef.current;
-
-    const next = {};
-
-    LANES.forEach(
-      (currentLane) => {
-        next[currentLane] =
-          currentLane === lane
-            ? "green"
-            : "red";
-      }
-    );
-
-    setSignals(next);
-    setSelectedLane(lane);
+    return;
   }
+
+  /*
+   * User manually selected a signal.
+   * Do not let the backend overwrite it.
+   */
+  manualSignalOverrideRef.current =
+    true;
+
+  previousSignalsRef.current =
+    signalsRef.current;
+
+  const next = {};
+
+  LANES.forEach(
+    (currentLane) => {
+      next[currentLane] =
+        currentLane === lane
+          ? "green"
+          : "red";
+    }
+  );
+
+  setSignals(next);
+  setSelectedLane(lane);
+}
 
   function dispatchAmbulance() {
     if (
@@ -1656,6 +1747,8 @@ export default function Simulation() {
 
     signalsRef.current =
       INITIAL_SIGNALS;
+    manualSignalOverrideRef.current =
+      false;
 
     setSelectedLane(
       "north"

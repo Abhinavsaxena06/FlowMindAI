@@ -1,39 +1,47 @@
+import {
+  BusFront,
+  CarFront,
+  Container,
+  Bike,
+} from "lucide-react";
+
 const types = [
   {
     name: "Cars",
-    value: 0,
+    key: "cars",
+    icon: CarFront,
   },
   {
     name: "Motorcycles",
-    value: 0,
+    key: "motorcycles",
+    icon: Bike,
   },
   {
     name: "Buses",
-    value: 0,
+    key: "buses",
+    icon: BusFront,
   },
   {
     name: "Trucks",
-    value: 0,
+    key: "trucks",
+    icon: Container,
   },
 ];
 
 export default function VehicleBreakdown({
   data = {},
 }) {
-  const values =
-    types.map(
-      (item) => ({
-        ...item,
-        value:
-          Number(
-            data[
-              item.name
-                .toLowerCase()
-            ] ??
-            item.value
-          ),
-      })
-    );
+  const values = types.map(
+    (item) => ({
+      ...item,
+      value: Math.max(
+        0,
+        Number(
+          data[item.key] ?? 0
+        )
+      ),
+    })
+  );
 
   const total =
     values.reduce(
@@ -43,52 +51,56 @@ export default function VehicleBreakdown({
     );
 
   return (
-    <div className="panel">
-
+    <section className="panel vehicle-panel">
       <div className="panel-header">
-
         <div>
           <div className="eyebrow">
             PERCEPTION
           </div>
 
-          <h2>
-            Vehicle mix
-          </h2>
+          <h2>Vehicle mix</h2>
+
+          <p>
+            Detected vehicle categories in the
+            current traffic feed.
+          </p>
         </div>
 
-        <strong>
-          {total}
-        </strong>
-
+        <div className="panel-total">
+          <strong>{total}</strong>
+          <span>Total</span>
+        </div>
       </div>
 
       <div className="vehicle-list">
+        {values.map((item) => {
+          const Icon = item.icon;
 
-        {values.map(
-          (item) => (
+          const percentage =
+            total > 0
+              ? (item.value / total) * 100
+              : 0;
+
+          return (
             <div
               className="vehicle-row"
               key={item.name}
             >
+              <div className="vehicle-name">
+                <div className="vehicle-icon">
+                  <Icon size={16} />
+                </div>
 
-              <span>
-                {item.name}
-              </span>
+                <span>
+                  {item.name}
+                </span>
+              </div>
 
               <div className="vehicle-value">
-                <div>
+                <div className="vehicle-progress">
                   <span
                     style={{
-                      width: `${
-                        total
-                          ? (
-                              item.value /
-                              total
-                            ) *
-                            100
-                          : 0
-                      }%`,
+                      width: `${percentage}%`,
                     }}
                   />
                 </div>
@@ -96,14 +108,18 @@ export default function VehicleBreakdown({
                 <strong>
                   {item.value}
                 </strong>
+
+                <small>
+                  {Math.round(
+                    percentage
+                  )}
+                  %
+                </small>
               </div>
-
             </div>
-          )
-        )}
-
+          );
+        })}
       </div>
-
-    </div>
+    </section>
   );
 }

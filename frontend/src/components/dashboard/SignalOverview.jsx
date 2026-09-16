@@ -2,36 +2,50 @@ import {
   ChevronRight,
 } from "lucide-react";
 
-const signals = [
-  {
-    lane: "NORTH",
-    state: "GREEN",
-    seconds: 34,
-  },
-  {
-    lane: "EAST",
-    state: "RED",
-    seconds: 18,
-  },
-  {
-    lane: "SOUTH",
-    state: "RED",
-    seconds: 12,
-  },
-  {
-    lane: "WEST",
-    state: "YELLOW",
-    seconds: 4,
-  },
+
+const LANES = [
+  "north",
+  "east",
+  "south",
+  "west",
 ];
 
-export default function SignalOverview() {
+
+export default function SignalOverview({
+  recommendation = null,
+  traffic = null,
+}) {
+
+  const strategy =
+    recommendation?.recommended_strategy ||
+    {};
+
+
+  const recommendedLane =
+    strategy?.phase ||
+    null;
+
+
+  const duration =
+    Number(
+      strategy?.duration_seconds ||
+      0
+    );
+
+
+  const currentPhase =
+    recommendedLane ||
+    traffic?.activeDirection ||
+    "unknown";
+
+
   return (
     <div className="panel">
 
       <div className="panel-header">
 
         <div>
+
           <div className="eyebrow">
             SIGNAL CONTROL
           </div>
@@ -39,58 +53,86 @@ export default function SignalOverview() {
           <h2>
             Junction A
           </h2>
+
         </div>
 
         <span className="badge success">
-          ADAPTIVE
+          BACKEND ACTIVE
         </span>
 
       </div>
 
+
       <div className="signal-list">
 
-        {signals.map(
-          (signal) => (
-            <div
-              className="signal-row"
-              key={signal.lane}
-            >
+        {LANES.map(
+          (lane) => {
 
-              <div className="signal-direction">
-                <span>
-                  {signal.lane}
-                </span>
+            const isGreen =
+              lane ===
+              recommendedLane;
 
-                <small>
-                  Phase
-                </small>
+            const state =
+              isGreen
+                ? "GREEN"
+                : "RED";
+
+
+            return (
+              <div
+                className="signal-row"
+                key={lane}
+              >
+
+                <div className="signal-direction">
+
+                  <span>
+                    {lane.toUpperCase()}
+                  </span>
+
+                  <small>
+                    Phase
+                  </small>
+
+                </div>
+
+
+                <div className="signal-state">
+
+                  <span
+                    className={`signal-dot ${state.toLowerCase()}`}
+                  />
+
+                  <strong>
+                    {state}
+                  </strong>
+
+                  <span>
+                    {isGreen
+                      ? `${duration}s`
+                      : "—"}
+                  </span>
+
+                </div>
+
               </div>
-
-              <div className="signal-state">
-
-                <span
-                  className={`signal-dot ${signal.state.toLowerCase()}`}
-                />
-
-                <strong>
-                  {signal.state}
-                </strong>
-
-                <span>
-                  {signal.seconds}s
-                </span>
-
-              </div>
-
-            </div>
-          )
+            );
+          }
         )}
 
       </div>
 
+
       <div className="panel-footer-link">
-        View signal control
-        <ChevronRight size={15} />
+
+        Active recommendation:
+        {" "}
+        {currentPhase.toUpperCase()}
+
+        <ChevronRight
+          size={15}
+        />
+
       </div>
 
     </div>

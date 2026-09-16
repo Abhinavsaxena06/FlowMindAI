@@ -1,12 +1,14 @@
+import asyncio
+
+import cv2
+
 from fastapi import (
     APIRouter,
     WebSocket,
     WebSocketDisconnect,
 )
 
-from fastapi.responses import (
-    Response,
-)
+from fastapi.responses import Response
 
 from backend.services.traffic_runtime import (
     traffic_runtime,
@@ -25,7 +27,6 @@ router = APIRouter(
 
 @router.get("/status")
 def get_status():
-
     return traffic_runtime.get_status()
 
 
@@ -37,7 +38,6 @@ def get_status():
 def start_traffic(
     source: str = "data/videos/traffic.mp4",
 ):
-
     return traffic_runtime.start(
         source=source
     )
@@ -49,7 +49,6 @@ def start_traffic(
 
 @router.post("/stop")
 def stop_traffic():
-
     return traffic_runtime.stop()
 
 
@@ -66,7 +65,6 @@ def get_result():
     )
 
     if result is None:
-
         return {
             "status": "waiting",
             "message": (
@@ -91,7 +89,6 @@ def get_state():
     )
 
     if state is None:
-
         return {
             "status": "waiting"
         }
@@ -112,7 +109,6 @@ def get_forecast():
     )
 
     if forecast is None:
-
         return {
             "status": "warming_up",
             "message": (
@@ -137,7 +133,6 @@ def get_recommendation():
     )
 
     if recommendation is None:
-
         return {
             "status": "warming_up",
             "message": (
@@ -147,6 +142,32 @@ def get_recommendation():
         }
 
     return recommendation
+
+
+# ================================================================
+# EXPLANATION
+# ================================================================
+
+@router.get("/explanation")
+def get_traffic_explanation():
+
+    result = (
+        traffic_runtime
+        .get_latest_result()
+    )
+
+    if not result:
+        return {
+            "status": "waiting",
+            "explanation": None,
+        }
+
+    return {
+        "status": "available",
+        "explanation": result.get(
+            "explanation"
+        ),
+    }
 
 
 # ================================================================
@@ -162,7 +183,6 @@ def get_frame():
     )
 
     if frame is None:
-
         return Response(
             content=b"",
             media_type="image/jpeg",
@@ -175,7 +195,6 @@ def get_frame():
     )
 
     if not success:
-
         return Response(
             content=b"",
             media_type="image/jpeg",
@@ -187,59 +206,182 @@ def get_frame():
         media_type="image/jpeg",
     )
 
+
 # ================================================================
-# TRAFFIC HISTORY
+# HISTORY
+#
+# Returns a flat time-series.
+# This is what Overview + Network graphs need.
 # ================================================================
 
 @router.get("/history")
 def get_history(limit: int = 30):
 
-    limit = max(1, min(limit, 60))
+    limit = max(
+        1,
+        min(limit, 60)
+    )
 
     engine = traffic_runtime.engine
 
-    history = {}
+    state_engine = (
+        engine.traffic_engine.state_engine
+    )
 
-    for approach in engine.predictor.APPROACHES:
+    states = (
+        state_engine
+        .get_recent_states()
+    )
 
-        values = engine.predictor.history.get(
-            approach,
-            []
+    states = states[-limit:]
+
+    history = []
+
+    for state in states:
+
+        approaches = (
+            state.get(
+                "approaches",
+                {}
+            )
         )
 
-        values = values[-limit:]
+        total_vehicles = 0
+        total_queue = 0
+        total_stopped = 0
+        weighted_speed = 0
+        density_total = 0
 
-        history[approach] = values
+        lane_counts = {}
+
+        for approach in [
+            "north",
+            "east",
+            "south",
+            "west",
+        ]:
+
+            data = approaches.get(
+                approach,
+                {}
+            )
+
+            vehicles = float(
+                data.get(
+                    "vehicles",
+                    0
+                )
+            )
+
+            queue = float(
+                data.get(
+                    "queue",
+                    0
+                )
+            )
+
+            stopped = float(
+                data.get(
+                    "stopped",
+                    0
+                )
+            )
+
+            speed = float(
+                data.get(
+                    "avg_speed_kmh",
+                    0
+                )
+            )
+
+            density = float(
+                data.get(
+                    "density",
+                    0
+                )
+            )
+
+            total_vehicles += vehicles
+            total_queue += queue
+            total_stopped += stopped
+
+            weighted_speed += (
+                vehicles * speed
+            )
+
+            density_total += density
+
+            lane_counts[approach] = int(
+                vehicles
+            )
+
+        average_speed = (
+            weighted_speed / total_vehicles
+            if total_vehicles > 0
+            else 0
+        )
+
+        average_density = (
+            density_total / 4
+        )
+
+        # Frontend-facing 0-100 congestion score.
+        congestion_score = min(
+            100,
+            round(
+                average_density * 45
+                + min(total_queue / 20, 1.0) * 35
+                + min(total_stopped / 20, 1.0) * 20
+            )
+        )
+
+        history.append({
+            "timestamp": state.get(
+                "timestamp"
+            ),
+
+            "total_vehicles": int(
+                total_vehicles
+            ),
+
+            "current_vehicles": int(
+                total_vehicles
+            ),
+
+            "waiting_vehicles": int(
+                total_queue
+            ),
+
+            "queue_count": int(
+                total_queue
+            ),
+
+            "average_speed": round(
+                average_speed,
+                2
+            ),
+
+            "density": round(
+                average_density,
+                3
+            ),
+
+            "congestion_score": (
+                congestion_score
+            ),
+
+            "lane_counts": lane_counts,
+
+            "approaches": approaches,
+        })
 
     return {
         "limit": limit,
-        "count": max(
-            [
-                len(values)
-                for values in history.values()
-            ],
-            default=0
-        ),
-        "approaches": history,
+        "count": len(history),
+        "history": history,
     }
 
-@router.get("/traffic/explanation")
-def get_traffic_explanation():
 
-    result = traffic_runtime.get_latest_result()
-
-    if not result:
-        return {
-            "status": "waiting",
-            "explanation": None,
-        }
-
-    return {
-        "status": "available",
-        "explanation": result.get(
-            "explanation"
-        ),
-    }
 # ================================================================
 # WEBSOCKET
 # ================================================================
@@ -262,11 +404,9 @@ async def traffic_websocket(
 
             if result is None:
 
-                await websocket.send_json(
-                    {
-                        "status": "waiting"
-                    }
-                )
+                await websocket.send_json({
+                    "status": "waiting"
+                })
 
             else:
 
@@ -274,7 +414,6 @@ async def traffic_websocket(
                     result
                 )
 
-            # Send approximately once per second.
             await asyncio.sleep(1)
 
     except WebSocketDisconnect:

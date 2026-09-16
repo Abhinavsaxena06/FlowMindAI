@@ -17,29 +17,37 @@ export default function TrafficStatus({
   const normal =
     tone === "normal";
 
+  const label =
+    status || "UNKNOWN";
+
+  const scoreValue =
+    Number(score || 0);
+
   return (
     <div
       className={`traffic-status ${tone}`}
     >
-
-      {normal ? (
-        <CheckCircle2 size={18} />
-      ) : (
-        <AlertTriangle size={18} />
-      )}
-
-      <div>
-        <strong>
-          {status || "UNKNOWN"}
-        </strong>
-
-        <span>
-          Congestion score{" "}
-          {Number(score || 0).toFixed(0)}
-        %
-        </span>
+      <div className="traffic-status-icon">
+        {normal ? (
+          <CheckCircle2 size={19} />
+        ) : (
+          <AlertTriangle size={19} />
+        )}
       </div>
 
+      <div className="traffic-status-content">
+        <span>TRAFFIC STATUS</span>
+
+        <strong>{label}</strong>
+
+        <p>
+          Congestion score{" "}
+          <b>
+            {scoreValue.toFixed(0)}
+          </b>
+          /100
+        </p>
+      </div>
     </div>
   );
 }

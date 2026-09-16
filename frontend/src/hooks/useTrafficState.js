@@ -5,122 +5,98 @@ import {
 } from "react";
 
 import {
-  getTrafficCurrent,
+  getTrafficState,
 } from "../services/api";
-
-import {
-  createTrafficSocket,
-} from "../services/websocket";
 
 import {
   normalizeTrafficState,
 } from "../utils/traffic";
 
+
 export default function useTrafficState() {
+
   const [
     traffic,
     setTraffic,
   ] = useState(null);
+
 
   const [
     loading,
     setLoading,
   ] = useState(true);
 
+
   const [
     error,
     setError,
   ] = useState(null);
+
 
   const [
     connected,
     setConnected,
   ] = useState(false);
 
-  const fetchState = useCallback(
-    async () => {
-      try {
-        const data =
-          await getTrafficCurrent();
 
-        setTraffic(
-          normalizeTrafficState(data)
-        );
+  const fetchState =
+    useCallback(
+      async () => {
 
-        setError(null);
-      } catch (err) {
-        setError(
-          err.message ||
-          "Unable to load traffic data"
-        );
-      } finally {
-        setLoading(false);
-      }
-    },
-    []
-  );
+        try {
 
-  useEffect(() => {
-    fetchState();
+          const data =
+            await getTrafficState();
 
-    let socket;
-    let reconnectTimer;
-    let pollingTimer;
+          if (
+            data?.status ===
+            "waiting"
+          ) {
+            return;
+          }
 
-    const startPolling = () => {
-      pollingTimer = setInterval(
-        fetchState,
-        5000
-      );
-    };
-
-    try {
-      socket = createTrafficSocket({
-        onOpen: () => {
-          setConnected(true);
-        },
-
-        onMessage: (data) => {
           setTraffic(
-            normalizeTrafficState(data)
+            normalizeTrafficState(
+              data
+            )
           );
 
-          setError(null);
           setConnected(true);
+          setError(null);
+
+        } catch (err) {
+
+          setConnected(false);
+
+          setError(
+            err.message ||
+            "Unable to load traffic data"
+          );
+
+        } finally {
+
           setLoading(false);
-        },
+        }
+      },
+      []
+    );
 
-        onClose: () => {
-          setConnected(false);
 
-          reconnectTimer =
-            setTimeout(() => {
-              startPolling();
-            }, 1000);
-        },
+  useEffect(() => {
 
-        onError: () => {
-          setConnected(false);
-        },
-      });
-    } catch {
-      startPolling();
-    }
+    fetchState();
 
-    return () => {
-      if (socket) {
-        socket.close();
-      }
-
-      clearTimeout(
-        reconnectTimer
+    const timer =
+      setInterval(
+        fetchState,
+        1000
       );
 
-      clearInterval(
-        pollingTimer
-      );
-    };
+    return () =>
+      clearInterval(timer);
+
   }, [fetchState]);
+
 
   return {
     traffic,
